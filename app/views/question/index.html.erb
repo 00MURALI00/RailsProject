@@ -1,0 +1,21 @@
+<h1> Questions </h1>
+<% if current_user.role == 'teacher' %>
+  <br>
+  <div>
+    <%= link_to 'Add Question', new_course_test_question_path(test_id: params[:test_id]), method: :post %>
+  </div>
+  <br>
+<% end %>
+<% if @questions.empty? == false %>
+  <table class="table table-bordered table-striped">
+    <tr>
+      <th>Name</th>
+    </tr>
+    <% @questions.each do |question| %>
+      <tr>
+        <td><%= link_to question.question, course_test_question_path(id: question.id) %></td>
+      </tr>
+    <% end %>
+  <% end  %>
+</table>
+  

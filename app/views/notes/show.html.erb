@@ -1,0 +1,14 @@
+<h1> Notes </h1>
+<h2> <%= @note.name %></h2>
+<h3> <%= @note.description %></h3>
+<br>
+<br>
+<%= link_to 'Download', rails_blob_path(@note.file, disposition: "attachment") %>
+<br>
+<br>
+<br>
+<p><%= link_to 'Back', { controller: 'notes', action: 'index' }%></p>
+<% if current_user.role == 'teacher' %>
+  <p><%= link_to 'Edit', { controller: 'notes', action: 'edit' }%></p>
+  <p><%= link_to "Delete", course_note_path(params[:course_id], @note), data: { turbo_confrim: "Are You Sure", turbo_method: :delete}%></p>
+<% end %>

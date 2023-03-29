@@ -1,0 +1,35 @@
+<%= form_for @question, url: {action: :create} do |f| %>
+  <h3>Add a Question</h3>
+  <div class="field">
+    <%= f.label :question %>
+    <%= f.text_field :question %>
+  </div>
+  <%= f.fields_for :option do |form| %>
+    <div class="field">
+      <%= form.label :opt1 %>
+      <%= form.text_field :opt1 %>
+    </div>
+    <div class="field">
+      <%= form.label :opt2 %>
+      <%= form.text_field :opt2 %>
+    </div>
+    <div class="field">
+      <%= form.label :opt3 %>
+      <%= form.text_field :opt3 %>
+    </div>
+    <div class="field">
+      <%= form.label :opt4 %>
+      <%= form.text_field :opt4 %>
+    </div>
+  <% end %>
+  <%= f.fields_for :answer do |form|%>
+    <div class="field">
+      <%= form.label :answer %>
+      <%= form.text_field :answer %>
+    </div>
+  <% end %>
+  <div class="actions">
+    <%= link_to 'Back', { controller: 'question', action: 'index'} %>
+    <%= f.submit %>
+  </div>
+<% end %>

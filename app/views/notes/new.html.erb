@@ -1,0 +1,26 @@
+<%= form_for @note, url: {action: :create} do |f| %>   
+        
+        <h3>Add Notes</h3>   
+  
+        <div class="field">   
+            <%= f.label :name %>   
+              <%= f.text_field :name %>   
+        </div>
+        <div class="field">   
+            <%= f.label :description %>   
+              <%= f.text_area :description %>   
+        </div>
+        <div class="field">   
+            <%= f.label :file%>
+              <%= f.file_field :file %>   
+        </div>
+        <div class="field">   
+              <%= f.hidden_field :course_id, value: params[:course_id]%>   
+        </div>
+      </div>   
+      <div class="actions">   
+        <%= link_to 'Back', { controller: 'notes', action: 'index'} %>   
+        <%= f.submit %>   
+      </div>   
+  <% end %>   
+</div>

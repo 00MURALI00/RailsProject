@@ -1,0 +1,20 @@
+<h3>Test</h3>
+<% if current_user.role == 'teacher' %>
+  <div>
+    <%= link_to 'Add Test', new_course_test_path(course_id: params[:course_id]), method: :post %>
+  </div>
+  <br>
+<% end %>
+<% if @tests.empty? == false %>
+  <table class="table table-bordered table-striped">
+    <tr>
+      <th>Name</th>
+    </tr>
+    <% @tests.each do |test| %>
+      <tr>
+        <td><%= link_to test.name, course_test_path(id: test.id, test_id: test.id) %></td>
+      </tr>
+    <% end %>
+  <% end  %>
+</table>
+  

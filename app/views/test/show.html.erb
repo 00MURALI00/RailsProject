@@ -1,0 +1,7 @@
+<h1> Test </h1>
+<p> <%= link_to 'Questions', course_test_question_index_path(test_id: @test.id) %></p>
+<p><%= link_to 'Back', { controller: 'test', action: 'index' }%></p>
+<% if current_user.role == 'teacher' %>
+  <p><%= link_to 'Edit', { controller: 'test', action: 'edit' }%></p>
+  <p><%= link_to "Delete", @course, data: { turbo_confrim: "Are You Sure", turbo_method: :delete} %></p>
+<% end %>

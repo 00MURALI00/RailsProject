@@ -1,0 +1,17 @@
+<h1>Question</h1>
+<br>
+<ul>
+  <li>  <%= @question.question %></li>
+  <ol>
+    <li><%= @question.option.opt1%></li>
+    <li><%= @question.option.opt2%></li>
+    <li><%= @question.option.opt3%></li>
+    <li><%= @question.option.opt4%></li>
+  </ol>
+</ul>
+<br>
+<p><%= link_to 'Back', { controller: 'question', action: 'index' }%></p>
+<% if current_user.role == 'teacher' %>
+  <p><%= link_to 'Edit', { controller: 'question', action: 'edit' }%></p>
+  <p><%= link_to 'Delete', course_test_question_path(params[:course_id], params[:test_id], params[:id]), data: { turbo_confirm: 'Are You Sure', turbo_method: :delete}%></p>
+<% end %>
