@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'testresult/index'
+  get 'testresult/show'
   devise_for :users, controllers: {
     registrations: 'users/registrations'
   }
@@ -11,7 +13,6 @@ Rails.application.routes.draw do
   get 'option/edit'
   get 'option/update'
   get 'notes/index'
-  # get 'courses/:course_id/test/index', to: 'test#index'
   # get 'test/index/courseId' to: 'test#new'
   get 'home/index'
   # get 'preview' to: 'notes#preview'
@@ -21,6 +22,7 @@ Rails.application.routes.draw do
       resources :question do
         resources :option
       end
+      resources :testresult
     end
     resources :notes 
   end

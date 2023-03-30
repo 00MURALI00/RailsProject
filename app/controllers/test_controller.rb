@@ -5,7 +5,12 @@ class TestController < ApplicationController
   end
 
   def show
-    @test = Test.find(params[:id])
+    if current_user.role == 'teacher'
+      @test = Test.find(params[:id])
+    else
+      @tests = Test.where(course_id: params[:course_id])
+      render :taketest
+    end
   end
 
   def new
@@ -44,8 +49,9 @@ class TestController < ApplicationController
       redirect_to course_test_index_path
     else
       redirect_to edit_course_test_path
-    end  
+    end
   end
+
   def test_params
     params.require(:test).permit(:name, :course_id)
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_28_070455) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_30_061918) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -75,6 +75,30 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_28_070455) do
   create_table "questions", force: :cascade do |t|
     t.string "question"
     t.integer "test_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "students", force: :cascade do |t|
+    t.string "name"
+    t.integer "age"
+    t.string "gender"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "teachers", force: :cascade do |t|
+    t.string "name"
+    t.integer "age"
+    t.string "gender"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "testresults", force: :cascade do |t|
+    t.integer "test_id"
+    t.integer "student_id"
+    t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

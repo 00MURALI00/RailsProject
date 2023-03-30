@@ -1,0 +1,2 @@
+module TestresultHelper
+end

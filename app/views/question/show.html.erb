@@ -12,6 +12,6 @@
 <br>
 <p><%= link_to 'Back', { controller: 'question', action: 'index' }%></p>
 <% if current_user.role == 'teacher' %>
-  <p><%= link_to 'Edit', { controller: 'question', action: 'edit' }%></p>
+  <p></p>
   <p><%= link_to 'Delete', course_test_question_path(params[:course_id], params[:test_id], params[:id]), data: { turbo_confirm: 'Are You Sure', turbo_method: :delete}%></p>
 <% end %>

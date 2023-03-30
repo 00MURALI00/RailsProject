@@ -1,0 +1,24 @@
+<%= form_with scope: :tests, url: course_test_testresult_index_url(test_id: params[:id]) , method: :create do |f|%>
+  <% cnt = 0 %>
+  <% @tests.each do |test| %>
+    <% test.questions.each do |question| %>
+      <%= f.fields_for "question_#{question.id}".to_sym do |form| %>
+        <% cnt = cnt + 1 %>
+        <div class="field mb-3">
+          <%=  cnt.to_s + ". " + question.question %> <br>
+          <%= form.radio_button :opt, question.option.opt1, class:'form-check-input' %>
+          <%= f.label :opt1, question.option.opt1 %>
+          <%= form.radio_button :opt, question.option.opt2, class:'form-check-input' %>
+          <%= f.label :opt1, question.option.opt2 %><br>
+          <%= form.radio_button :opt, question.option.opt3, class:'form-check-input' %>
+          <%= f.label :opt1, question.option.opt3 %>
+          <%= form.radio_button :opt, question.option.opt4, class:'form-check-input' %>
+          <%= f.label :opt1, question.option.opt4 %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+  <div class="actions">
+    <%= f.submit "Finish attempt" %>
+  </div>
+<% end %>

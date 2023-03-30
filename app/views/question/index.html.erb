@@ -1,21 +1,28 @@
 <h1> Questions </h1>
 <% if current_user.role == 'teacher' %>
-  <br>
   <div>
-    <%= link_to 'Add Question', new_course_test_question_path(test_id: params[:test_id]), method: :post %>
+    <%= link_to 'Add Question', new_course_test_question_path(test_id: params[:test_id]), method: :post , class:'btn btn-danger'%>
   </div>
+  <br>
   <br>
 <% end %>
 <% if @questions.empty? == false %>
-  <table class="table table-bordered table-striped">
-    <tr>
-      <th>Name</th>
-    </tr>
+  <div class='card-group'>
     <% @questions.each do |question| %>
-      <tr>
-        <td><%= link_to question.question, course_test_question_path(id: question.id) %></td>
-      </tr>
+      <div class="card" style="width: 18rem;">
+        <ul class="list-group list-group-flush">
+          <b>
+            <li class="list-group-item"><%= question.question %></li>
+          </b>
+          <li class="list-group-item"><b>Option a: </b>'<%= question.option.opt1 %>'</li>
+          <li class="list-group-item"><b>Option b: </b>'<%= question.option.opt2 %>'</li>
+          <li class="list-group-item"><b>Option c: </b>'<%= question.option.opt3 %>'</li>
+          <li class="list-group-item"><b>Option d: </b>'<%= question.option.opt4 %>'</li>
+          <li class="list-group-item"><b>Answer: </b>'<%= question.answer.answer %>'</li>
+        </ul>
+      </div>
+      <br>
     <% end %>
-  <% end  %>
+  </div>
+<% end  %>
 </table>
-  

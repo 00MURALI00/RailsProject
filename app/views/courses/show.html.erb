@@ -1,11 +1,32 @@
 <h1> <%= @course.name %></h1>
-<%= link_to 'Tests', course_test_index_path(course_id: @course.id), method: :post %>
 <br>
-<%= link_to 'Notes', course_notes_path(course_id: @course.id), method: :post %>
+<div class="card">
+  <div class="card-header">
+    <%= @course.name %>
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">TESTS</h3>
+    <p class="card-text">Click on the 'Go to Tests' to view tests in <%= @course.name %>.</p>
+    <%= link_to 'Go to Tests', course_test_index_path(course_id: @course.id), method: :post , class:'btn btn-primary' %>
+  </div>
+</div>
 <br>
+<div class="card">
+  <div class="card-header">
+    <%= @course.name %>
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">NOTES</h3>
+    <p class="card-text">Click on the 'Go to Notes' to view notes in <%= @course.name %></p>
+    <%= link_to ' Go to Notes', course_notes_path(course_id: @course.id), method: :post , class:'btn btn-primary' %>  </div>
+  </div>
+</div>
 <br>
-<p><%= link_to 'Back', { controller: 'courses', action: 'index' }%></p>
-<% if current_user.role == 'teacher' %>
-  <p><%= link_to 'Edit', { controller: 'courses', action: 'edit' }%></p>
-  <p><%= link_to "Delete", @course, data: { turbo_confrim: "Are You Sure", turbo_method: :delete} %></p>
-<% end %>
+<div class= 'container-fluid'>
+  <p><%= link_to 'Back', { controller: 'courses', action: 'index' } , class: 'btn btn-primary'  %>
+    <% if current_user.role == 'teacher' %>
+      <%= link_to 'Edit', { controller: 'courses', action: 'edit' } , class: 'btn btn-primary' %>
+      <%= link_to "Delete", @course, data: { turbo_confrim: "Are You Sure", turbo_method: :delete} , class: 'btn btn-primary' %>
+    <% end %>
+  </p>
+</div>

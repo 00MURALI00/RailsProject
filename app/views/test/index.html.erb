@@ -1,20 +1,29 @@
 <h3>Test</h3>
 <% if current_user.role == 'teacher' %>
   <div>
-    <%= link_to 'Add Test', new_course_test_path(course_id: params[:course_id]), method: :post %>
+    <%= link_to 'Add Test', new_course_test_path(course_id: params[:course_id]), method: :post , class:'btn btn-danger' %>
   </div>
   <br>
 <% end %>
 <% if @tests.empty? == false %>
-  <table class="table table-bordered table-striped">
-    <tr>
-      <th>Name</th>
-    </tr>
-    <% @tests.each do |test| %>
-      <tr>
-        <td><%= link_to test.name, course_test_path(id: test.id, test_id: test.id) %></td>
-      </tr>
-    <% end %>
-  <% end  %>
+<div class='card-group'>
+  <% @tests.each do |test| %>
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title"><%= test.name %></h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+        <p class="card-text">This is a test from <%= test.course.name %></p>
+        <% if current_user.role == 'teacher' %>
+          <%= link_to 'Click to view', course_test_question_index_path(test_id: test.id) , class: 'btn btn-primary' %>
+          <%= link_to 'Edit', edit_course_test_path(params[:course_id], test) , class: 'btn btn-primary' %>
+          <%= link_to "Delete", course_test_path(id: test.id), data: { turbo_confrim: "Are You Sure", turbo_method: :delete} , class: 'btn btn-primary' %>
+        <% else %>
+          <%= link_to 'Click to Take test', course_test_path(id: test.id, test_id: test.id) , class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+    </div>
+    <br>
+  <% end %>
+  </div>
+<% end  %>
 </table>
-  
