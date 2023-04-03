@@ -22,7 +22,7 @@ class QuestionController < ApplicationController
       redirect_to course_test_question_index_path
     else
       flash[:notice] = 'Failed to add question'
-      redirect_to new_course_test_question_path
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -37,7 +37,7 @@ class QuestionController < ApplicationController
       redirect_to course_test_question_index_path
     else
       flash[:notice] = 'Failed to update the Notes'
-      redirect_to new_course_test_question_path
+      render :edit, status: :unprocessable_entity
     end
   end
 

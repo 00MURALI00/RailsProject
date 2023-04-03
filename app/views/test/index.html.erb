@@ -15,7 +15,8 @@
         <% if current_user.role == 'teacher' %>
           <%= link_to 'Click to view', course_test_question_index_path(test_id: test.id) , class:'btn btn-primary' %>
           <%= link_to 'Edit', edit_course_test_path(params[:course_id], test) , class:'btn btn-primary' %>
-          <%= link_to "Delete", @course, data: { turbo_confrim: "Are You Sure", turbo_method: :delete} , class:'btn btn-primary' %>
+          <br><br>
+          <%= button_to "Delete", course_test_path(id: test.id), method: :delete , class:'btn btn-primary' %>
         <% else %>
           <%= link_to 'Click to Take', course_test_path(id: test.id, test_id: test.id) , class:'btn btn-primary' %>
         <% end %>
@@ -23,5 +24,7 @@
     </div>
     <br>
   <% end %>
+<% else %>
+  <h1> There is No test Available </h1>
 <% end  %>
 </table>

@@ -8,7 +8,7 @@ class TestController < ApplicationController
     if current_user.role == 'teacher'
       @test = Test.find(params[:id])
     else
-      @tests = Test.where(course_id: params[:course_id])
+      @testw = Test.find_by(id: params[:id])
       render :taketest
     end
   end
@@ -26,7 +26,7 @@ class TestController < ApplicationController
       redirect_to course_test_index_path
     else
       flash[:notice] = 'Failed to add Test'
-      redirect_to new_course_test_path
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -39,7 +39,7 @@ class TestController < ApplicationController
     if @test.update(test_params)
       redirect_to course_test_index_path
     else
-      redirect_to edit_course_test_path
+      render :edit, status: :unprocessable_entity
     end
   end
 

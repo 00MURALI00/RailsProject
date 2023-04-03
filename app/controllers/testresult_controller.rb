@@ -4,7 +4,7 @@ class TestresultController < ApplicationController
   end
   
   def create
-    score = getScore(params[:tests])
+    score = getScore(params[:test])
     # p score
     @testresult = Testresult.new(test_id: params[:test_id], score: score)
     if @testresult.save
@@ -12,7 +12,7 @@ class TestresultController < ApplicationController
       redirect_to course_path(params[:course_id])
     else
       flash[:notice] = 'failed'
-      redirect_to test_testtake_path
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -20,7 +20,7 @@ class TestresultController < ApplicationController
   end
 
   def getScore (hash)
-
+    p hash  
     score = 0
     hash.each do |key, value|
       question = key[9,key.length]

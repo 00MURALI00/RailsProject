@@ -1,19 +1,27 @@
-<%= form_for @test, url: {action: :create} do |f| %>   
-        
-        <h3>Add a Test</h3>   
-  
-        <div class="field mb-3">   
-            <%= f.label :name , class:"form-label"%>   
-              <%= f.text_field :name , class:"form-control" %>   
-        </div>   
-        <div class="field"> 
-              <%= f.number_field :course_id, id: :courses_test_course_id,value: params[:course_id], type: :hidden%> 
-        </div>  
-        </p>   
-      </div>   
-       <div class="actions container-fluid">   
-        <%= link_to 'Back', course_test_index_path , class:'btn btn-primary'%>  
-        <%= f.submit 'Create', class: 'btn btn-primary' %>   
-      </div>   
-  <% end %>   
+<%= form_for @test, url: {action: :create} do |f| %>
+  <% if @test.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@test.errors.count, "error") %> prohibited this test from being saved:</h2>
+      <ul>
+        <% @test.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <h3>Add a Test</h3>
+  <div class="field mb-3">
+    <%= f.label :name , class:"form-label"%>
+    <%= f.text_field :name , class:"form-control" %>
+  </div>
+  <div class="field">
+    <%= f.number_field :course_id, id: :courses_test_course_id,value: params[:course_id], type: :hidden%>
+  </div>
+</p>
+</div>
+<div class="actions container-fluid">
+  <%= link_to 'Back', course_test_index_path , class:'btn btn-primary'%>
+  <%= f.submit 'Create', class: 'btn btn-primary' %>
+</div>
+<% end %>
 </div>

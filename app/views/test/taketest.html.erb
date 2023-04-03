@@ -1,7 +1,7 @@
-<%= form_with scope: :tests, url: course_test_testresult_index_url(test_id: params[:id]) , method: :create do |f|%>
-  <% cnt = 0 %>
-  <% @tests.each do |test| %>
-    <% test.questions.each do |question| %>
+<% if !@test.nil? %>
+  <%= form_with scope: :test, url: course_test_testresult_index_url(test_id: params[:id]) , method: :create do |f|%>
+    <% cnt = 0 %>
+    <% @test.questions.each do |question| %>
       <%= f.fields_for "question_#{question.id}".to_sym do |form| %>
         <% cnt = cnt + 1 %>
         <div class="field mb-3">
@@ -17,8 +17,8 @@
         </div>
       <% end %>
     <% end %>
+    <div class="actions">
+      <%= f.submit "Finish attempt" %>
+    </div>
   <% end %>
-  <div class="actions">
-    <%= f.submit "Finish attempt" %>
-  </div>
 <% end %>
