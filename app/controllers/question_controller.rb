@@ -19,7 +19,7 @@ class QuestionController < ApplicationController
     # p @question 
     if @question.save
       flash[:notice] = 'Successfully added the Notes'
-      redirect_to course_test_index_path
+      redirect_to course_test_question_index_path
     else
       flash[:notice] = 'Failed to add question'
       redirect_to new_course_test_question_path

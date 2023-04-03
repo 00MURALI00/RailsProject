@@ -19,6 +19,7 @@
           <li class="list-group-item"><b>Option c: </b>'<%= question.option.opt3 %>'</li>
           <li class="list-group-item"><b>Option d: </b>'<%= question.option.opt4 %>'</li>
           <li class="list-group-item"><b>Answer: </b>'<%= question.answer.answer %>'</li>
+          <li class="list-group-item"><%= link_to 'Edit',  edit_course_test_question_path(course_id: params[:course_id], test_id: params[:test_id],id: question.id) , class:'btn btn-primary' %> <%= link_to 'Delete', course_test_question_path(course_id: params[:course_id], test_id: params[:test_id],id: question.id), data: { turbo_confirm: 'Are You Sure', turbo_method: :delete}, class:'btn btn-primary'%></li>
         </ul>
       </div>
       <br>

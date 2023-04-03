@@ -1,22 +1,21 @@
 <h3>Courses</h3>
+<br>
 <% if current_user.role == 'teacher' %>
   <div>
-    <%= link_to 'Add Course', new_course_path %>
+    <%= link_to 'Add Course', new_course_path , class:'btn btn-danger' %>
   </div>
   <br>
 <% end %>
 <% if Course.exists? %>
-  <table class="table table-bordered table-striped">
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-    </tr>
-    <% @courses.each do |course| %>
-      <tr>
-        <td><%= link_to course.name.to_s , course_path(course_id: course.id, id: course.id) %></td>
-        <br>
-        <td><%= link_to course.description.to_s , course_path(course_id: course.id, id: course.id) %></td>
-      </tr>
-    <% end %>
-  <% end  %>
-</table>
+  <%# <div class="card-group"> %>
+  <% @courses.each do |course| %>
+    <div class="card w-75 mb-3">
+      <div class="card-body">
+        <h5 class="card-title"><%= course.name %></h5>
+        <p class="card-text"><%= course.description %></p>
+        <%= link_to 'Go to ' + course.name.to_s , course_path(course_id: course.id, id: course.id) , class:'btn btn-primary' %>
+      </div>
+    </div>
+  <% end %>
+</div>
+<% end %>

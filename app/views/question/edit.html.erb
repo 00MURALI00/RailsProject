@@ -1,29 +1,29 @@
 <%= form_for @question, url: {action: :update} do |f| %>
   <h3>Add a Question</h3>
-  <div class="field">
-    <%= f.label :question %>
-    <%= f.text_field :question %>
+  <div class="field mp-3">
+    <%= f.label :question , class:"form-label" %>
+    <%= f.text_field :question , class:"form-control" %><br>
   </div>
   <%= f.fields_for :option do |form| %>
-    <div class="field">
-      <%= form.label :opt1 %>
-      <%= form.text_field :opt1 %>
+    <div class="field mp-3">
+      <%= form.label :opt1 ,class:"form-label" %>
+      <%= form.text_field :opt1 , class:"form-control" %><br>
     </div>
-    <div class="field">
-      <%= form.label :opt2 %>
-      <%= form.text_field :opt2 %>
+    <div class="field mp-3">
+      <%= form.label :opt2 , class:"form-label"%>
+      <%= form.text_field :opt2 , class:"form-control" %><br>
     </div>
-    <div class="field">
-      <%= form.label :opt3 %>
-      <%= form.text_field :opt3 %>
+    <div class="field mp-3">
+      <%= form.label :opt3 , class:"form-label" %>
+      <%= form.text_field :opt3 ,class:"form-control" %><br>
     </div>
-    <div class="field">
-      <%= form.label :opt4 %>
-      <%= form.text_field :opt4 %>
+    <div class="field mp-3">
+      <%= form.label :opt4 , class:"form-label"%>
+      <%= form.text_field :opt4 ,class:"form-control" %><br>
     </div>
   <% end %>
   <div class="actions">
-    <%= link_to 'Back', { controller: 'question', action: 'index'} %>
-    <%= f.submit %>
+    <%= link_to 'Back', { controller: 'question', action: 'index'} , class:'btn btn-primary' %><br><br>
+    <%= f.submit 'Update', class:'btn btn-primary' %>
   </div>
 <% end %>
