@@ -6,7 +6,7 @@ class TestresultController < ApplicationController
   def create
     score = getScore(params[:test])
     # p score
-    @testresult = Testresult.new(test_id: params[:test_id], score: score)
+    @testresult = Testresult.new(test_id: params[:test_id], score: score, student_id: current_user.accountable_id)
     if @testresult.save
       flash[:notice] = 'Successfull'
       redirect_to course_path(params[:course_id])

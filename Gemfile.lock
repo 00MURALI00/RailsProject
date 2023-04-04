@@ -46,6 +46,9 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_record-events (4.1.2)
+      activerecord (>= 4.0)
+      verbs (~> 2.2)
     activeadmin (2.13.1)
       arbre (~> 1.2, >= 1.2.1)
       formtastic (>= 3.1, < 5.0)
@@ -310,6 +313,9 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.4.2)
+    verbs (2.3.1)
+      activesupport (>= 2.3.4)
+      i18n
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.0)
@@ -336,6 +342,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  active_record-events
   activeadmin (~> 2.13, >= 2.13.1)
   bootsnap
   capybara

@@ -1,9 +1,13 @@
 class NotesController < ApplicationController
   def index
-    @notes = Note.all.where(course_id: params[:course_id])
+    @notes = if current_user.role == 'teacher'
+               Note.all.where(course_id: params[:course_id])
+             else
+               Note.all.where(course_id: params[:course_id]).where.not(published_at: nil)
+             end
   end
 
-  def new 
+  def new
     @note = Note.new
   end
 
@@ -30,15 +34,15 @@ class NotesController < ApplicationController
     @note = Note.find(params[:id])
     # p @note
     if @note.update(note_params)
-      @note.file.attach(params[:note][:file]) 
+      @note.file.attach(params[:note][:file])
       flash[:notice] = 'Successfully Updated the Notes'
       redirect_to course_notes_path
     else
       flash[:notice] = 'Failed to update the Notes'
-      render :edit, status: :unprocessable_entity 
+      render :edit, status: :unprocessable_entity
     end
   end
-  
+
   def destroy
     @note = Note.find(params[:id])
     p @note

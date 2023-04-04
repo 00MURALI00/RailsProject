@@ -1,14 +1,18 @@
 class TestController < ApplicationController
   def index
-    @tests = Test.all.where(course_id: params[:course_id])
-    p params[:test_id]
+    @tests = if current_user.role == 'teacher'
+               Test.all.where(course_id: params[:course_id])
+             else
+               Test.all.where(course_id: params[:course_id]).where.not(published_at: nil)
+             end
+    # p params[:test_id]
   end
 
   def show
     if current_user.role == 'teacher'
       @test = Test.find(params[:id])
     else
-      @testw = Test.find_by(id: params[:id])
+      @test = Test.find_by(id: params[:id])
       render :taketest
     end
   end
@@ -46,8 +50,10 @@ class TestController < ApplicationController
   def destroy
     @test = Test.find(params[:id])
     if @test.destroy
+      flash[:notice] = 'Successfully deleted'
       redirect_to course_test_index_path
     else
+      flash[:notice] = 'Failed to delete'
       redirect_to edit_course_test_path
     end
   end

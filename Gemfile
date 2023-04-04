@@ -75,3 +75,4 @@ gem "prawn", "~> 2.4"
 gem 'solargraph', group: :development
 gem 'devise', '~> 4.9'
 gem 'activeadmin', '~> 2.13', '>= 2.13.1'
+gem 'active_record-events'

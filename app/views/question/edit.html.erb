@@ -1,15 +1,14 @@
 <%= form_for @question, url: {action: :update} do |f| %>
-<% if @question.errors.any? %>
-  <div id="error_explanation">
-    <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
-
-    <ul>
-      <% @question.errors.each do |error| %>
-        <li><%= error.full_message %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+  <% if @question.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+      <ul>
+        <% @question.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
   <h3>Add a Question</h3>
   <div class="field mp-3">
     <%= f.label :question , class:"form-label" %>
@@ -33,8 +32,15 @@
       <%= form.text_field :opt4 ,class:"form-control" %><br>
     </div>
   <% end %>
+  <%= f.fields_for :answer do |form|%>
+    <div class="field">
+      <%= form.label :answer %>
+      <%= form.text_field :answer %>
+    </div>
+  <% end %>
   <div class="actions">
-    <%= link_to 'Back', { controller: 'question', action: 'index'} , class:'btn btn-primary' %><br><br>
+    <%= link_to 'Back', { controller: 'question', action: 'index'} , class:'btn btn-primary' %><br>
+    <br>
     <%= f.submit 'Update', class:'btn btn-primary' %>
   </div>
 <% end %>

@@ -1,7 +1,9 @@
 <h1>Notes</h1>
 <% if current_user.role == 'teacher' %>
   <br>
-  <%= link_to 'Add Notes', new_course_note_path(course_id: params[:course_id])%>
+  <%= link_to 'Add Notes', new_course_note_path(course_id: params[:course_id]), class:'btn btn-danger' %>
+  <br>
+  <br>
   <br>
 <% end %>
 <% if @notes.size != 0 %>
