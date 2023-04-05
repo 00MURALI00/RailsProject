@@ -17,15 +17,16 @@ ActiveAdmin.register Note do
     column :name
     column :description
     column 'Published', :published_at?
-    column '' do |note|
-      link_to 'view', admin_note_path(id: note.id)
-    end
-    column '' do |note|
-      link_to 'edit', edit_admin_note_path(id: note.id)
-    end
-    column '' do |note|
-      link_to 'delete', admin_note_path(id: note.id), method: :delete
-    end
+    # column '' do |note|
+    #   link_to 'view', admin_note_path(id: note.id)
+    # end
+    # column '' do |note|
+    #   link_to 'edit', edit_admin_note_path(id: note.id)
+    # end
+    # column '' do |note|
+    #   link_to 'delete', admin_note_path(id: note.id), method: :delete
+    # end
+    actions
   end
 
   member_action :published, method: :put do

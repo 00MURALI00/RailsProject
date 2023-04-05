@@ -12,15 +12,16 @@ ActiveAdmin.register Test do
       link_to course.name, admin_course_path(course)
     end
     column 'Published', :published?
-    column '' do |test|
-      link_to 'view', admin_test_path(id: test.id)
-    end
-    column '' do |test|
-      link_to 'edit', edit_admin_test_path(id: test.id)
-    end
-    column '' do |test|
-      link_to 'delete', admin_test_path(id: test.id), method: :delete
-    end
+    # column '' do |test|
+    #   link_to 'view', admin_test_path(id: test.id)
+    # end
+    # column '' do |test|
+    #   link_to 'edit', edit_admin_test_path(id: test.id)
+    # end
+    # column '' do |test|
+    #   link_to 'delete', admin_test_path(id: test.id), method: :delete
+    # end
+    actions
   end
 
   scope :all
