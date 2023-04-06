@@ -6,4 +6,11 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   belongs_to :accountable, polymorphic: true
+
+  validates :email, format: URI::MailTo::EMAIL_REGEXP
+
+  def self.authenticate(email, password)
+    user = User.find_for_authenticate(email: email)
+    user&.valid_presence?(password) ? user : nil
+  end
 end
