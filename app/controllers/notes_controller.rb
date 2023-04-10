@@ -1,4 +1,5 @@
 class NotesController < ApplicationController
+  before_action :authenticate_user!
   def index
     @notes = if current_user.role == 'teacher'
                Note.all.where(course_id: params[:course_id])

@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
-class Api::TestresultController < ApplicationController
+class Api::TestresultController < Api::ApiController
   protect_from_forgery with: :null_session
+  before_action :doorkeeper_authorize!
 
   def index
-    @testresult = Testresult.all
-    render json: @testresult
+    @testresult = if current_user.role == ('student')
+                    Testresult.where(student_id: current_user.accountable_id)
+                  else
+                    Testresult.all
+                  end
   end
 
   def create

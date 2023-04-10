@@ -1,4 +1,5 @@
 class QuestionController < ApplicationController
+  before_action :authenticate_user!
   def index
     @questions = Question.all.where(test_id: params[:test_id])
   end

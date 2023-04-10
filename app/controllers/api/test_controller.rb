@@ -1,25 +1,26 @@
-class Api::TestController < ApplicationController
+class Api::TestController < Api::ApiController
   protect_from_forgery with: :null_session
+  before_action :doorkeeper_authorize!
   def index
-    @tests = Test.all
-    # @tests = if current_user.role == 'teacher'
-    #            Test.all.where(course_id: params[:course_id])
-    #          else
-    #            Test.all.where(course_id: params[:course_id]).where.not(published_at: nil)
-    #          end
-    # p params[:test_id]
+    # @tests = Test.all
+    @tests = if current_user.role == 'teacher'
+               Test.all.where(course_id: params[:course_id])
+             else
+               Test.all.where(course_id: params[:course_id]).where.not(published_at: nil)
+             end
+    p params[:test_id]
     render json: @tests
   end
 
   def show
-    @test = Test.find_by(id: params[:id])
+    # @test = Test.find_by(id: params[:id])
     # p @test
-    # if current_user.role == 'teacher'
-    #   @test = Test.find(params[:id])
-    # else
-    #   @test = Test.find_by(id: params[:id])
-    # render :taketest
-    # end
+    if current_user.role == 'teacher'
+      @test = Test.find(params[:id])
+    else
+      @test = Test.find_by(id: params[:id])
+    render :taketest
+    end
     if !@test.nil?
       render json: @test
     else

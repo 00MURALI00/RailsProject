@@ -1,8 +1,12 @@
 class TestresultController < ApplicationController
   def index
-
+    @testresult = if current_user.role == ('student')
+                    Testresult.where(student_id: current_user.accountable_id)
+                  else
+                    Testresult.all
+                  end
   end
-  
+
   def create
     score = getScore(params[:test])
     # p score
@@ -16,19 +20,25 @@ class TestresultController < ApplicationController
     end
   end
 
-  def show
+  def destroy
+    @testresult = Testresult.find(params[:testresult_id])
+    if @testresult.destroy
+      flash[:notice] = 'Successfully Destroyed Test result'
+      redirect_to testresult_index_path
+    else
+      flash[:notice] = 'Failed to destroy Test result'
+      redirect_to testresult_index_path
+    end
   end
 
-  def getScore (hash)
-    p hash  
+  def getScore(hash)
+    p hash
     score = 0
     hash.each do |key, value|
-      question = key[9,key.length]
+      question = key[9, key.length]
       answer = Answer.select(:answer).find_by(question_id: question)
       # p "#{answer[:answer]} #{value[:opt]}"
-      if answer[:answer].eql?(value[:opt])
-        score = score + 1
-      end
+      score += 1 if answer[:answer].eql?(value[:opt])
       # p answer
     end
     # p score

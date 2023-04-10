@@ -91,7 +91,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_06_040523) do
 
   create_table "oauth_access_tokens", force: :cascade do |t|
     t.integer "resource_owner_id"
-    t.integer "application_id", null: false
+    t.integer "application_id"
     t.string "token", null: false
     t.string "refresh_token"
     t.integer "expires_in"

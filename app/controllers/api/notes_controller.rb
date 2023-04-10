@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
-class Api::NotesController < ApplicationController
-  protect_from_forgery with: :null_session
+class Api::NotesController < Api::ApiController
+  protect_from_forgery with: :null_session4
+  before_action :doorkeeper_authorize!
   def index
-    @notes = Note.all
-    # @notes = if current_user.role == 'teacher'
-    #            Note.all.where(course_id: params[:course_id])
-    #          else
-    #            Note.all.where(course_id: params[:course_id]).where.not(published_at: nil)
-    #          end
+    # @notes = Note.all
+    @notes = if current_user.role == 'teacher'
+               Note.all.where(course_id: params[:course_id])
+             else
+               Note.all.where(course_id: params[:course_id]).where.not(published_at: nil)
+             end
     render json: @notes
   end
 

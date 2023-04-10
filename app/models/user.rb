@@ -10,7 +10,7 @@ class User < ApplicationRecord
   validates :email, format: URI::MailTo::EMAIL_REGEXP
 
   def self.authenticate(email, password)
-    user = User.find_for_authenticate(email: email)
-    user&.valid_presence?(password) ? user : nil
+    user = User.find_for_authentication(email: email)
+    user&.valid_password?(password) ? user : nil
   end
 end

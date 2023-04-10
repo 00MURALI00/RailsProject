@@ -7,4 +7,5 @@ class Student < ApplicationRecord
   scope :test_not_taken, lambda {
                            Student.where('id NOT IN (?)', Array.wrap(Testresult.select(:student_id).pluck(:student_id)))
                          }
+  accepts_nested_attributes_for :user
 end

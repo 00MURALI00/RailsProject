@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: 'users/registrations'
   }
+  # get 'testresult/index', to: 'testresult#index', as: :testresult_ind
+  delete 'testresult/:testresult_id', to: 'testresult#destroy', as: :testresult_destroy
   get 'answer/index'
   get 'answer/edit'
   get 'answer/show'
@@ -33,7 +35,7 @@ Rails.application.routes.draw do
     resources :notes
   end
   # Defines the root path route ("/")
-  root 'home#index'
+  root 'courses#index'
   # devise_for :users, controllers: {
   #   sessions: 'users/sessions'
   # }
@@ -44,8 +46,9 @@ Rails.application.routes.draw do
     get 'testresult/index'
     get 'testresult/show'
     devise_for :users, controllers: {
-      registrations: 'users/registrations'
+      registrations: 'api/users/registration'
     }
+    get 'testresult/index'
     get 'answer/index'
     get 'answer/edit'
     get 'answer/show'

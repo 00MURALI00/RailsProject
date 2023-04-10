@@ -1,4 +1,5 @@
 class TestController < ApplicationController
+  before_action :authenticate_user!
   def index
     @tests = if current_user.role == 'teacher'
                Test.all.where(course_id: params[:course_id])
