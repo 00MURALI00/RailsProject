@@ -34,14 +34,16 @@ class TestresultController < ApplicationController
 
   def getScore(hash)
     score = 0
-    hash.each do |key, value|
-      question = key[9, key.length]
-      answer = Answer.select(:answer).find_by(question_id: question)
-      # p "#{answer[:answer]} #{value[:opt]}"
-      score += 1 if answer[:answer].eql?(value[:opt])
-      # p answer
+    unless hash.nil?
+      hash.each do |key, value|
+        question = key[9, key.length]
+        answer = Answer.select(:answer).find_by(question_id: question)
+        # p "#{answer[:answer]} #{value[:opt]}"
+        score += 1 if answer[:answer].eql?(value[:opt])
+        # p answer
+      end
+      # p score
     end
-    # p score
     score
   end
 end

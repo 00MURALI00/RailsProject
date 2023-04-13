@@ -1,4 +1,4 @@
-<br>
+<h1> Courses </h1><br>
 <div>
   <% if user_signed_in? && current_user.role == 'teacher' %>
     <div>
@@ -7,19 +7,23 @@
     <br>
   <% end %>
   <% if Course.exists? %>
-    <%# <div class="card-group"> %>
-    <% @courses.each do |course| %>
-      <h4 ><%= course.name %></h4>
-      <p ><%= course.description %></p>
-      <% if user_signed_in? && current_user.role == 'student' && !current_user.accountable.courses.include?(course) %>
-        <%= link_to 'Enroll', enroll_course_path(course.id) , class:'ui primary button' %>
-      <% else %>
-        <%= link_to 'Go to ' + course.name.to_s , course_path(course_id: course.id, id: course.id) , class:'ui primary button' %>
+    <div class="cards">
+      <% @courses.each do |course| %>
+        <div class="card w-75 mb-3">
+          <div class="card-body">
+            <h4 class="card-title"><%= course.name.capitalize %></h4><br>
+            <h5 class="class-text"><%= course.description %></h5><br>
+            <% if user_signed_in? && current_user.role == 'student' && !current_user.accountable.courses.include?(course) %>
+              <%= link_to 'Enroll', enroll_course_path(course.id) , class:'btn btn-primary' %>
+            <% else %>
+              <%= link_to 'Go to ' + course.name.to_s , course_path(course_id: course.id, id: course.id) , class:'btn btn-primary' %>
+            <% end %>
+          </div>
+          <br>
+        </div>
+        <br>
+        <br>
       <% end %>
-      <br>
-      <br>
-      <br>
-    <% end %>
-  </div>
-<% end %>
+    </div>
+  <% end %>
 </div>

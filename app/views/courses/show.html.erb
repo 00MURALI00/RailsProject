@@ -22,7 +22,7 @@
   </div>
 </div>
 <br>
-<div class='ui raised very padded text container segment'>
+<div class='ui container'>
   <p><%= link_to 'Back', { controller: 'courses', action: 'index' } , class: 'btn btn-primary'  %>
     <% if current_user.role == 'teacher' %>
       <%= link_to 'Edit', { controller: 'courses', action: 'edit' } , class: 'btn btn-primary' %>
