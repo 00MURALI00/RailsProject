@@ -2,10 +2,16 @@ class QuestionController < ApplicationController
   before_action :authenticate_user!
   def index
     @questions = Question.all.where(test_id: params[:test_id])
+    return if current_user.accountable.course_ids.include?(params[:course_id].to_i)
+
+    render json: { message: 'Autheraization Restricted' }, status: :unauthorized
   end
 
   def show
     @question = Question.find(params[:id])
+    return if current_user.accountable.course_ids.include?(params[:course_id].to_i)
+
+    render json: { message: 'Autheraization Restricted' }, status: :unauthorized
   end
 
   def new
@@ -13,11 +19,11 @@ class QuestionController < ApplicationController
     @question.build_option
     @question.build_answer
   end
-  
+
   def create
     @question = Question.new(question_params)
     @question.test_id = params[:test_id]
-    # p @question 
+    # p @question
     if @question.save
       flash[:notice] = 'Successfully added the Notes'
       redirect_to course_test_question_index_path
@@ -55,6 +61,7 @@ class QuestionController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:question, option_attributes: %i[opt1 opt2 opt3 opt4], answer_attributes: [:answer])
+    params.require(:question).permit(:question, option_attributes: %i[opt1 opt2 opt3 opt4],
+                                                answer_attributes: [:answer])
   end
 end

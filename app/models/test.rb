@@ -1,6 +1,6 @@
 class Test < ApplicationRecord
   belongs_to :course
-  validates :course, presence: true
+  validates :name, presence: true, length: { maximum: 50 }
   has_many :questions, dependent: :destroy
   has_many :testresults, dependent: :destroy
   has_event :publish

@@ -9,35 +9,39 @@ class Api::TestController < Api::ApiController
                Test.all.where(course_id: params[:course_id]).where.not(published_at: nil)
              end
     p params[:test_id]
-    render json: @tests
+    if current_user.accountable.courses.tests.include?(@tests)
+      render json: @tests, status: :ok
+    else
+      render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+    end
   end
 
   def show
-    # @test = Test.find_by(id: params[:id])
-    # p @test
-    if current_user.role == 'teacher'
+    if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
       @test = Test.find(params[:id])
-    else
+    elsif current_user.role == 'student' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
       @test = Test.find_by(id: params[:id])
-    render :taketest
+      render json: @test, include: %i[questions options], status: :ok
+    else
+      render json: { message: 'Autheraization Restricted' }, status: :unauthorized
     end
     if !@test.nil?
-      render json: @test
+      render json: @test, status: :ok
     else
-      render json: 'Record Not Found'
+      render json: { message: 'Not Found' }, status: :not_found
     end
-  end
-
-  def new
-    @test = Test.new
   end
 
   def create
-    @test = Test.new(test_params)
-    if @test.save
-      render json: @test
+    if current_user.role == 'teacher'
+      @test = Test.new(test_params)
+      if @test.save
+        render json: @test, status: :created
+      else
+        render json: { message: @test.errors.full_message }, status: :unprocessable_entity
+      end
     else
-      render json: @test.errors
+      render json: { message: 'Autheraization Restricted' }, status: :unauthorized
     end
   end
 
@@ -47,27 +51,35 @@ class Api::TestController < Api::ApiController
 
   def update
     @test = Test.find_by(id: params[:id])
-    if !@test.nil?
-      if @test.update(test_params)
-        render json: @test
+    if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
+      if !@test.nil?
+        if @test.update(test_params)
+          render json: { message: 'Updated Successfully' }, status: :ok
+        else
+          render json: { message: 'Something went wrong' }, status: :unprocessable_entity
+        end
       else
-        render json: 'Something went wrong'
+        render json: { message: 'Not Found' }, status: :not_found
       end
     else
-      render json: 'Something went wrong'
+      render json: { message: 'Autheraization Restricted' }, status: :unauthorized
     end
   end
 
   def destroy
     @test = Test.find_by(id: params[:id])
-    if !@test.nil?
-      if @test.destroy
-        render json: @test
+    if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
+      if !@test.nil?
+        if @test.destroy
+          render json: { message: 'Destroy Successfully' }, status: :ok
+        else
+          render json: { message: 'Something went wrong' }, status: :unprocessable_entity
+        end
       else
-        render json: 'Something went wrong'
+        render json: { message: 'Not Found' }, status: :not_found
       end
     else
-      render json: 'Something went wrong'
+      render json: { message: 'Autheraization Restricted' }, status: :unauthorized
     end
   end
 

@@ -96,7 +96,6 @@ Doorkeeper.configure do
   # If you want to disable expiration, set this to `nil`.
   #
   access_token_expires_in 1.day
-
   # Assign custom TTL for access tokens. Will be used instead of access_token_expires_in
   # option if defined. In case the block returns `nil` value Doorkeeper fallbacks to
   # +access_token_expires_in+ configuration option value. If you really need to issue a

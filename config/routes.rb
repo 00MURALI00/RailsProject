@@ -26,6 +26,8 @@ Rails.application.routes.draw do
   # get 'preview' to: 'notes#preview'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :courses do
+    get '/enroll', to: 'courses#enroll', on: :member
+    get '/drop', to: 'courses#drop', on: :member
     resources :test do
       resources :question do
         resources :option
@@ -63,6 +65,8 @@ Rails.application.routes.draw do
     # get 'preview' to: 'notes#preview'
     # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
     resources :courses do
+      get '/enroll', to: 'courses#enroll', on: :member
+      get '/drop', to: 'courses#drop', on: :member
       resources :test do
         resources :question do
           resources :option
@@ -72,7 +76,7 @@ Rails.application.routes.draw do
       resources :notes
     end
     # Defines the root path route ("/")
-    root 'home#index'
+    root 'courses#index'
     # devise_for :users, controllers: {
     #   sessions: 'users/sessions'
     # }

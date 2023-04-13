@@ -3,65 +3,70 @@ class Api::QuestionController < Api::ApiController
   before_action :doorkeeper_authorize!
   def index
     @questions = Question.includes(:option).all.where(test_id: params[:test_id])
-    render json: @questions, include: [:option]
+    if current_user.accountable.course_ids.include?(params[:course_id].to_i)
+      render json: @questions, include: [:option], status: :ok
+    else
+      render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+    end
   end
 
   def show
     @question = Question.includes(:option).find_by(id: params[:id])
     if !@question.nil?
-      # @question << option: @option
-      render json: @question, include: [:option]
+      if current_user.accountable.course_ids.include?(params[:course_id].to_i)
+        render json: @question, include: [:option], status: :ok
+      else
+        render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+      end
     else
-      render json: 'Record Not Found'
+      render json: { message: 'Not Found' }, status: :not_found
     end
-  end
-
-  def new
-    @question = Question.new
-    @question.build_option
-    @question.build_answer
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.test_id = params[:test_id]
-    # p @question
-    if @question.save
-      # flash[:notice] = 'Successfully added the Notes'
-      render json: @question
-      # redirect_to course_test_question_index_path
+    if current_user.role == 'teacher'
+      @question = Question.new(question_params)
+      @question.test_id = params[:test_id]
+      if @question.save
+        render json: @question, status: :created
+      else
+        render json: { error: @question.errors.full_message }, status: :unprocessable_entity
+      end
     else
-      render json: @question.error
-      # render :new, status: :unprocessable_entity
+      render json: { error: 'You are not authorized to perform this action' }, status: :unauthorized
     end
-  end
-
-  def edit
-    @question = Question.find(params[:id])
   end
 
   def update
     @question = Question.includes(:option).find_by(params[:id])
-    if !@question.nil?
-      if @question.update(question_params)
-        render json: @question, include: [:option]
+    if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
+      if !@question.nil?
+        if @question.update(question_params)
+          render json: { message: 'Updated Successfully' }, include: [:option], status: :accepted
+        else
+          render json: { error: @question.errors.full_message }, status: :unprocessable_entity
+        end
       else
-        render json: @question.errors
+        render json: { message: 'Not Found' }, status: :not_found
       end
     else
-      render json: 'Record Not Found'
+      render json: { error: 'You are not authorized to perform this action' }, status: :unauthorized
     end
   end
 
   def destroy
     @question = Question.includes(:option).find_by(id: params[:id])
-    if !@question.nil?
-      if @question.destroy
-        render json: @question, include: [:option]
-      else
-        render json: @question.error
-      end else
-            render json: 'Record Not Found'
+    if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
+      if !@question.nil?
+        if @question.destroy
+          render json: { message: 'Destroyed Successfully' }, include: [:option], status: :ok
+        else
+          render json: { error: @question.errors.full_message }, status: :unprocessable_entity
+        end else
+              render json: { message: 'Not Found' }, status: :not_found
+      end
+    else
+      render json: { error: @question.errors.full_message }, status: :unprocessable_entity
     end
   end
 

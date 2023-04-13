@@ -22,11 +22,13 @@
   </div>
 </div>
 <br>
-<div class= 'container-fluid'>
+<div class='ui raised very padded text container segment'>
   <p><%= link_to 'Back', { controller: 'courses', action: 'index' } , class: 'btn btn-primary'  %>
     <% if current_user.role == 'teacher' %>
       <%= link_to 'Edit', { controller: 'courses', action: 'edit' } , class: 'btn btn-primary' %>
       <%= link_to "Delete", @course, data: { turbo_confrim: "Are You Sure", turbo_method: :delete} , class: 'btn btn-primary' %>
+    <% else %> 
+      <%= link_to 'Drop Course', drop_course_path(@course) , data: { confrim: 'Are you sure?' }, class: 'btn btn-primary' %>
     <% end %>
   </p>
 </div>

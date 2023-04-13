@@ -2,7 +2,7 @@
 
 module Api
   class ApiController < ApplicationController
-  skip_before_action :verify_authenticity_token
+  before_action :doorkeeper_authorize!
 
   respond_to :json
   # helper method to access the current user from the doorkeeper token

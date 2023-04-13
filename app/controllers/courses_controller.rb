@@ -1,51 +1,116 @@
 class CoursesController < ApplicationController
   before_action :authenticate_user!, except: %i[index]
   def index
-    @courses = Course.all
+    @courses = if user_signed_in? && current_user.role == 'teacher'
+                 current_user.accountable.courses
+               else
+                 Course.all
+               end
   end
 
   def show
     @course = Course.find(params[:id])
+    # return unless current_user.role == 'student'
+
+    if current_user.accountable.courses.include?(@course)
+      render :show
+    else
+      flash[:notice] = 'You are not authorized to view this page'
+      redirect_to courses_path
+    end
   end
 
   def new
-    @course = Course.new
+    if current_user.role == 'teacher'
+      @course = Course.new
+    else
+      flash[:notice] = 'You are not authorized to view this page'
+      redirect_to courses_path
+    end
   end
 
   def create
-    @course = Course.new(name: params[:course][:name], description: params[:course][:description])
-    p @course
-    if @course.save
-      flash[:notice] = 'Successfully created the Course'
-      redirect_to courses_path
+    if current_user.role == 'teacher'
+      @course = Course.new(name: params[:course][:name], description: params[:course][:description],
+                           teacher_id: current_user.accountable_id)
+      if @course.save
+        flash[:notice] = 'Successfully created the Course'
+        redirect_to courses_path
+      else
+        flash[:notice] = 'Failed to create Course'
+        render :new, status: :unprocessable_entity
+      end
     else
-      flash[:notice] = 'Failed to create Course'
-      render :new, status: :unprocessable_entity
+      flash[:notice] = 'You are not authorized to view this page'
+      redirect_to course_path
     end
   end
 
   def destroy
-    @course = Course.find(params[:id])
-    @course.destroy
-    respond_to do |format|
-      format.html { redirect_to courses_url, notice: 'Course was successfully destroyed.' }
-      format.json { head :no_content }
+    if current_user.role == 'teacher'
+      @course = Course.find(params[:id])
+      @course.destroy
+      respond_to do |format|
+        format.html { redirect_to courses_url, notice: 'Course was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      flash[:notice] = 'You are not authorized to view this page'
+      redirect_to course_path
     end
   end
 
   def edit
-    @course = Course.find(params[:id])
+    @course = Course.find_by(id: params[:id])
+    if !(current_user.role == 'teacher' && current_user.accountable.courses.include?(@course))
+      flash[:notice] = 'You are not authorized to view this page'
+      redirect_to courses_path
+    end
   end
 
   def update
     @course = Course.find(params[:id])
-    if @course.update(course_params)
-      # p @course
-      flash[:notice] = 'Sucessfully edited the Course'
-      redirect_to courses_path
+    if current_user.role == 'teacher' && current_user.accountable.courses.include?(@course)
+      if @course.update(course_params)
+        # p @course
+        flash[:notice] = 'Sucessfully edited the Course'
+        redirect_to courses_path
+      else
+        flash[:notice] = 'Failed to edit the Course'
+        render :edit, status: :unprocessable_entity
+      end
     else
-      flash[:notice] = 'Failed to edit the Course'
-      render :edit, status: :unprocessable_entity
+      flash[:notice] = 'You are not authorized to view this page'
+      redirect_to course_path
+    end
+  end
+
+  def enroll
+    @course = Course.find(params[:id])
+    if current_user.role == 'student'
+      @course.students << current_user.accountable
+      flash[:notice] = 'Successfully enrolled in the Course'
+      redirect_to course_path
+    else
+      flash[:notice] = 'You are not authorized to view this page'
+      redirect_to courses_path
+    end
+  end
+
+  def drop
+    @course = Course.find_by(id: params[:id])
+    if current_user.role == 'student'
+      if current_user.accountable.courses.include?(@course)
+        @course.students.delete(current_user.accountable)
+        flash[:notice] = 'Successfully dropped the Course'
+        redirect_to courses_path
+      else
+        flash[:notice] = 'You are not authorized to view this page'
+        redirect_to courses_path
+      end
+    else
+      flash[:notice] = 'You are not authorized to view this page'
+      redirect_to courses_path
     end
   end
 

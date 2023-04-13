@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_06_040523) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_11_095712) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -78,6 +78,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_06_040523) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "teacher_id"
+  end
+
+  create_table "courses_students", id: false, force: :cascade do |t|
+    t.integer "student_id"
+    t.integer "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_courses_students_on_course_id"
+    t.index ["student_id"], name: "index_courses_students_on_student_id"
   end
 
   create_table "notes", force: :cascade do |t|

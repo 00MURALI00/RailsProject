@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AnswerController < ApplicationController
   def index
   end

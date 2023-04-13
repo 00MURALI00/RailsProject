@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class TestresultController < ApplicationController
   def index
-    @testresult = if current_user.role == ('student')
+    @testresult = if current_user.role == 'student'
                     Testresult.where(student_id: current_user.accountable_id)
                   else
                     Testresult.all
@@ -9,7 +11,6 @@ class TestresultController < ApplicationController
 
   def create
     score = getScore(params[:test])
-    # p score
     @testresult = Testresult.new(test_id: params[:test_id], score: score, student_id: current_user.accountable_id)
     if @testresult.save
       flash[:notice] = 'Successfull'
@@ -32,7 +33,6 @@ class TestresultController < ApplicationController
   end
 
   def getScore(hash)
-    p hash
     score = 0
     hash.each do |key, value|
       question = key[9, key.length]

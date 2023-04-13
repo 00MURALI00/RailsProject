@@ -5,24 +5,40 @@ class Api::TestresultController < Api::ApiController
   before_action :doorkeeper_authorize!
 
   def index
-    @testresult = if current_user.role == ('student')
+    @testresult = if current_user.role == 'student'
                     Testresult.where(student_id: current_user.accountable_id)
                   else
                     Testresult.all
                   end
+    render json: @testresult, status: :ok
   end
 
   def create
-    score = getScore(params[:test])
-    @testresult = Testresult.new(test_id: params[:test_id], score: score, student_id: params[:student_id])
-    if @testresult.save
-      render json: @testresult
+    if current_user.role == 'student'
+      score = getScore(params[:test])
+      @testresult = Testresult.new(test_id: params[:test_id], score: score, student_id: params[:student_id])
+      if @testresult.save
+        render json: @testresult, status: :created
+      else
+        render json: { message: 'Something went wrong' }, status: :unprocessable_entity
+      end
     else
-      render json: 'Something went wrong'
+      render json: { message: 'Authorization restricted' }, status: :unauthorized
     end
   end
 
-  def show; end
+  def destroy
+    @testresult = Testresult.find(params[:testresult_id])
+    if current_user.role == 'teacher' && current_user.accountable.courses.include?(@testresult.test.course)
+      if @testresult.destroy
+        render json: { message: 'Destroyed Successfully' }, status: :ok
+      else
+        render json: { message: 'Something went wrong' }, status: :unprocessable_entity
+      end
+    else
+      render json: { message: 'Authorization restricted' }, status: :unauthorized
+    end
+  end
 
   def getScore(hash)
     score = 0
