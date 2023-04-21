@@ -1,25 +1,24 @@
-<h1> Test Results </h1>
+<h1 style='text-align:center'> Test Results </h1><br>
 <% if @testresult.length != 0 %>
-  <div class='card-group'>
+      <div class="cards ui raised text container segment", style='width:500%'>
     <% @testresult.each do |testresult| %>
-      <div class="card" style="width: 18rem;">
-        <ul class="list-group list-group-flush">
-          <b>
+     <div class="card w-75 mb-3">
+      <div class="card-body">
             <% if current_user.role == 'teacher' %>
-              <li class="list-group-item"><%= testresult.student_id %></li>
+            <% student = Student.find(testresult.student_id) %>
+              <h4 class="card-title"><b> Student: </b><%= student.name.capitalize %> </h4><br>
             <% end %>
-          </b>
-          <li class="list-group-item"><b>Test Name: </b>'<%= testresult.test.name %>'</li>
-          <li class="list-group-item"><b>Score: </b>'<%= testresult.score %>'</li>
+          <h5 class="class-text"><b>Test Name: </b>'<%= testresult.test.name %>'</h5><br>
+          <h5 class="class-text"><b>Score: </b><%= testresult.score %></h5><br>
           <% if current_user.role == 'teacher' %>
             <li class="list-group-item">
               <%= link_to 'Delete', testresult_destroy_path(testresult.id), data: { turbo_confirm: 'Are You Sure', turbo_method: :delete}, class:'btn btn-primary'%></li>
           <% end %>
-        </ul>
-      </div>
+        </div>
+        </div><br>
       <br>
     <% end %>
-  </div>
+      </div>
 <% else %>
   <h1> Nothing here!!!</h1>
 <% end  %>

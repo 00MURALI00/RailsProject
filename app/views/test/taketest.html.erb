@@ -1,24 +1,29 @@
-<% if !@test.nil? %>
-  <%= form_with scope: :test, url: course_test_testresult_index_url(test_id: params[:id]) , method: :create do |f|%>
+<% if !@test.nil? && @test.questions.length != 0 %>
+  <%= form_with scope: :test, url: course_test_testresult_index_url(test_id: params[:id]) , method: :create, remote: true do |f|%>
     <% cnt = 0 %>
     <% @test.questions.each do |question| %>
       <%= f.fields_for "question_#{question.id}".to_sym do |form| %>
         <% cnt = cnt + 1 %>
-        <div class="field mb-3">
+        <div class="field mb-3 ui raised very padded text container segment">
           <%=  cnt.to_s + ". " + question.question %> <br>
-          <%= form.radio_button :opt, question.option.opt1, class:'form-check-input' %>
-          <%= f.label :opt1, question.option.opt1 %>
-          <%= form.radio_button :opt, question.option.opt2, class:'form-check-input' %>
-          <%= f.label :opt1, question.option.opt2 %><br>
-          <%= form.radio_button :opt, question.option.opt3, class:'form-check-input' %>
-          <%= f.label :opt1, question.option.opt3 %>
-          <%= form.radio_button :opt, question.option.opt4, class:'form-check-input' %>
-          <%= f.label :opt1, question.option.opt4 %>
+          <br>
+          <div class="form-check">
+            <%= form.radio_button :opt, question.option.opt1, class:"form-check-input" %>
+            <%= f.label :opt1, question.option.opt1 %><br>
+            <%= form.radio_button :opt, question.option.opt2, class:'form-check-input' %>
+            <%= f.label :opt1, question.option.opt2 %><br>
+            <%= form.radio_button :opt, question.option.opt3, class:'form-check-input' %>
+            <%= f.label :opt1, question.option.opt3 %><br>
+            <%= form.radio_button :opt, question.option.opt4, class:'form-check-input' %>
+            <%= f.label :opt1, question.option.opt4 %><br>
+          </div>
         </div>
       <% end %>
     <% end %>
-    <div class="actions">
-      <%= f.submit "Finish attempt" %>
+    <div class="actions ui text container" style="text-align:right">
+      <%= f.submit "Finish attempt", class:'btn btn-primary' %>
     </div>
   <% end %>
+<% else %>
+  <h1>There is no question has been added </h1>
 <% end %>

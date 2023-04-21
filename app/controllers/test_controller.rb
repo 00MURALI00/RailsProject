@@ -18,7 +18,15 @@ class TestController < ApplicationController
       @test = Test.find(params[:id])
     elsif current_user.role == 'student' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
       @test = Test.find_by(id: params[:id])
+      count = Testresult.where(test_id: @test.id, student_id: current_user.accountable.id).count
+      p @test.attempts
+      p count
+      if @test.attempts > count
       render :taketest
+      else
+        flash[:notice] = 'You are left with no attempts'
+        redirect_to course_test_index_path
+      end
     else
       flash[:notice] = 'Unauthorized access'
       redirect_to courses_path
@@ -72,6 +80,6 @@ class TestController < ApplicationController
   end
 
   def test_params
-    params.require(:test).permit(:name, :course_id)
+    params.require(:test).permit(:name, :course_id, :attempts)
   end
 end
