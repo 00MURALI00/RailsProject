@@ -1,25 +1,37 @@
 class TestController < ApplicationController
   before_action :authenticate_user!
   def index
-    @tests = if current_user.role == 'teacher'
+    # debugger
+    @tests = if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
                Test.all.where(course_id: params[:course_id])
-             else
+             elsif current_user.role == 'student' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
                Test.all.where(course_id: params[:course_id]).where.not(published_at: nil)
+             else
+               flash[:notice] = 'Unauthorized access'
+               redirect_to courses_path
              end
     # p params[:test_id]
   end
 
   def show
-    if current_user.role == 'teacher'
+    if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
       @test = Test.find(params[:id])
-    else
+    elsif current_user.role == 'student' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
       @test = Test.find_by(id: params[:id])
       render :taketest
+    else
+      flash[:notice] = 'Unauthorized access'
+      redirect_to courses_path
     end
   end
 
   def new
-    @test = Test.new
+    if current_user.role == 'teacher'
+      @test = Test.new
+    else
+      flash[:notice] = 'Unauthorized access'
+      redirect_to courses_path
+    end
     # p @test
   end
 
@@ -27,7 +39,7 @@ class TestController < ApplicationController
     @test = Test.new(test_params)
     # render plain: @test
     if @test.save
-      p @test
+      # p @test
       redirect_to course_test_index_path
     else
       flash[:notice] = 'Failed to add Test'

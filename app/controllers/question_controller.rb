@@ -4,14 +4,14 @@ class QuestionController < ApplicationController
     @questions = Question.all.where(test_id: params[:test_id])
     return if current_user.accountable.course_ids.include?(params[:course_id].to_i)
 
-    render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+    # render json: { message: 'Autheraization Restricted' }, status: :unauthorized
   end
 
   def show
     @question = Question.find(params[:id])
     return if current_user.accountable.course_ids.include?(params[:course_id].to_i)
 
-    render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+    # render json: { message: 'Autheraization Restricted' }, status: :unauthorized
   end
 
   def new
@@ -21,6 +21,11 @@ class QuestionController < ApplicationController
   end
 
   def create
+    if current_user.role == 'student' || !current_user.accountable.course_ids.include?(params[:course_id].to_i)
+      flash[:notice] = 'Unauthorized Access'
+      redirect_to root_path
+      return
+    end
     @question = Question.new(question_params)
     @question.test_id = params[:test_id]
     # p @question
@@ -50,8 +55,8 @@ class QuestionController < ApplicationController
 
   def destroy
     @question = Question.find(params[:id])
-    p @question
-    if @question.destroy
+    # p @question
+    if @question.destroy && current_user.role == 'teacher'
       flash[:notice] = 'Successfully deleted the question'
       redirect_to course_test_question_index_path
     else

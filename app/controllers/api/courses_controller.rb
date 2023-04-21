@@ -10,13 +10,21 @@ class Api::CoursesController < Api::ApiController
                else
                  Course.all
                end
-    render json: @courses.to_json
+    render json: @courses.to_json, status: :ok
   end
 
   def show
     @course = Course.find_by(id: params[:id])
-    if current_user.accountable.courses.include?(@course)
+    # debugger
+    if current_user.role == 'teacher' && current_user.accountable.courses.include?(@course)
       render json: @course, status: :ok
+    elsif current_user.role == 'student'
+      student = Student.find_by(id: current_user.accountable_id)
+      if @course.students.include?(student)
+        render json: @course, status: :ok
+      else
+        render json: '404 Not Found', status: :unauthorized  
+      end
     else
       render json: '404 Not Found', status: :not_found
     end
@@ -24,15 +32,17 @@ class Api::CoursesController < Api::ApiController
 
   def create
     @course = Course.new(name: params[:course][:name], description: params[:course][:description])
-    if current_user.role == 'teacher' && current_user.accountable.courses.include?(@course)
+    if current_user.role == 'teacher' 
+      @course.teacher_id = current_user.accountable_id
+      # debugger
       if @course.save
         render json: @course, status: :created
       else
-        render json: { error: @course.errors.full_message }, status: :unprocessable_entity
+        render json: { error: @course.errors }, status: :unprocessable_entity
       end
     else
       render json: { error: 'Authorization restricted' }, status: :unauthorized
-    end
+    end 
   end
 
   def destroy
@@ -42,7 +52,7 @@ class Api::CoursesController < Api::ApiController
         if @course.destroy
           render json: { message: 'Destroyed Successfully' }, status: :ok
         else
-          render json: { error: @course.errors.full_message }, status: :unprocessable_entity
+          render json: { error: @course.errors }, status: 422
         end
       else
         render json: { message: 'Something went wrong' }, status: :not_found
@@ -57,9 +67,9 @@ class Api::CoursesController < Api::ApiController
     if current_user.role == 'teacher' && current_user.accountable.courses.include?(@course)
       if !@course.nil?
         if @course.update(course_params)
-          render json: { message: 'Updated Successfully' }, status: :accepted
+          render json: { message: 'Updated Successfully' }, status: :ok
         else
-          render json: { error: @course.errors.full_message }, status: :unprocessable_entity
+          render json: { error: @course.errors}, status: 422
         end
       else
         render json: { message: 'Something went wrong' }, status: :not_found

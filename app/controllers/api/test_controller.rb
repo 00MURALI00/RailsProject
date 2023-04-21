@@ -8,8 +8,9 @@ class Api::TestController < Api::ApiController
              else
                Test.all.where(course_id: params[:course_id]).where.not(published_at: nil)
              end
-    p params[:test_id]
-    if current_user.accountable.courses.tests.include?(@tests)
+    # p params[:test_id]
+    # debugger
+    if current_user.accountable.course_ids.include?(params[:course_id].to_i)
       render json: @tests, status: :ok
     else
       render json: { message: 'Autheraization Restricted' }, status: :unauthorized
@@ -21,9 +22,11 @@ class Api::TestController < Api::ApiController
       @test = Test.find(params[:id])
     elsif current_user.role == 'student' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
       @test = Test.find_by(id: params[:id])
-      render json: @test, include: %i[questions options], status: :ok
+      render json: @test, status: :ok
+      return
     else
       render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+      return
     end
     if !@test.nil?
       render json: @test, status: :ok
@@ -38,7 +41,7 @@ class Api::TestController < Api::ApiController
       if @test.save
         render json: @test, status: :created
       else
-        render json: { message: @test.errors.full_message }, status: :unprocessable_entity
+        render json: { message: @test.errors }, status: :unprocessable_entity
       end
     else
       render json: { message: 'Autheraization Restricted' }, status: :unauthorized

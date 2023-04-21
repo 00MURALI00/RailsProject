@@ -12,15 +12,6 @@ Rails.application.routes.draw do
   }
   # get 'testresult/index', to: 'testresult#index', as: :testresult_ind
   delete 'testresult/:testresult_id', to: 'testresult#destroy', as: :testresult_destroy
-  get 'answer/index'
-  get 'answer/edit'
-  get 'answer/show'
-  get 'option/index'
-  get 'option/show'
-  get 'option/create'
-  get 'option/edit'
-  get 'option/update'
-  get 'notes/index'
   # get 'test/index/courseId' to: 'test#new'
   get 'home/index'
   # get 'preview' to: 'notes#preview'

@@ -7,18 +7,16 @@
   <br>
 <% end %>
 <% if @notes.size != 0 %>
-  <table class="table table-bordered table-striped">
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-    </tr>
+  <div class="card">
     <% @notes.each do |note| %>
-      <tr>
-        <td><%= link_to note.name, course_note_path(id: note.id) %></td>
-        <td><%= link_to note.description, course_note_path(id: note.id) %></td>
-      </tr>
+      <div class="card-body">
+        <div class='card-title display-4'><%= note.name.capitalize %></div>
+        <div class='card-text display-6'><%= note.description %><br><br>
+        <%= link_to "Go to #{note.name}", course_note_path(id: note.id), class:'btn btn-primary' %>
+      </div>
     <% end %>
+    </div>
   </table>
 <% else %>
-<h1>There is no notes avaliable</h1>
+  <h1>There is no notes avaliable</h1>
 <% end %>

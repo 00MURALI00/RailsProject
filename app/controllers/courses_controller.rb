@@ -49,14 +49,16 @@ class CoursesController < ApplicationController
   def destroy
     if current_user.role == 'teacher'
       @course = Course.find(params[:id])
-      @course.destroy
-      respond_to do |format|
-        format.html { redirect_to courses_url, notice: 'Course was successfully destroyed.' }
-        format.json { head :no_content }
+      if @course.destroy
+        flash[:notice] = 'Course was successfully destroyed.'
+        redirect_to courses_path
+      else
+        flash[:notice] = 'Failed to destroy Course'
+        redirect_to courses_path
       end
     else
       flash[:notice] = 'You are not authorized to view this page'
-      redirect_to course_path
+      redirect_to courses_path
     end
   end
 

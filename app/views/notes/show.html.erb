@@ -1,14 +1,22 @@
-<h1> Notes </h1>
-<h2> <%= @note.name %></h2>
-<h3> <%= @note.description %></h3>
+<div class="ui raised very padded text container segment">
+<h1> Notes </h1><br>
+<% if !@note.published_at.nil? %>
+<%# <% p @note  %>
+<h2> <%= @note.name.capitalize %></h2>
+<h3> <%= @note.description %> </h3>
 <br>
 <br>
-<%= link_to 'Download', rails_blob_path(@note.file, disposition: "attachment") %>
+<%= link_to 'Download', rails_blob_path(@note.file, disposition: "attachment"), class:"btn btn-primary btn-lg" %>
 <br>
 <br>
 <br>
-<p><%= link_to 'Back', { controller: 'notes', action: 'index' }%></p>
+<p><%= link_to 'Back', { controller: 'notes', action: 'index' }, class:'btn btn-primary'%>
 <% if current_user.role == 'teacher' %>
-  <p><%= link_to 'Edit', { controller: 'notes', action: 'edit' }%></p>
-  <p><%= link_to "Delete", course_note_path(params[:course_id], @note), data: { turbo_confrim: "Are You Sure", turbo_method: :delete}%></p>
+  <%= link_to 'Edit', { controller: 'notes', action: 'edit' }, class:'btn btn-primary'%>
+  <%= link_to "Delete", course_note_path(params[:course_id], @note), data: { turbo_confrim: "Are You Sure", turbo_method: :delete}, class:'btn btn-primary'%>
+<% end %>
+</p>
+</div>
+<% else %>
+  <h3>No Notes has been uploaded!!!</h3>
 <% end %>

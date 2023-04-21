@@ -28,7 +28,7 @@ class Api::TestresultController < Api::ApiController
   end
 
   def destroy
-    @testresult = Testresult.find(params[:testresult_id])
+    @testresult = Testresult.find(params[:id])
     if current_user.role == 'teacher' && current_user.accountable.courses.include?(@testresult.test.course)
       if @testresult.destroy
         render json: { message: 'Destroyed Successfully' }, status: :ok

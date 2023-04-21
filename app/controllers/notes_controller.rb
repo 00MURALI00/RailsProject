@@ -1,6 +1,6 @@
 class NotesController < ApplicationController
   before_action :authenticate_user!
-  
+
   def index
     @notes = if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
                @notes = Note.all.where(course_id: params[:course_id])
@@ -17,12 +17,12 @@ class NotesController < ApplicationController
       @note = Note.new
     else
       flash[:notice] = 'You are not authorized to view this page'
-      redirect_to course_notes_path
+      redirect_to course_notes_path(course_id: params[:course_id])
     end
   end
 
   def create
-    if current_user.role == 'teacher'
+    if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
       @note = Note.new(note_params)
       if @note.save
         flash[:notice] = 'Successfully Added the Notes'
@@ -34,41 +34,54 @@ class NotesController < ApplicationController
     else
       flash[:notice] = 'You are not authorized to view this page'
       redirect_to course_notes_path
-      return
+      nil
     end
   end
 
   def show
-    @note = Note.find_by(id: params[:id], published_at: 'not nil')
-    if !current_user.accountable.course_ids.include?(params[:course_id].to_i)
+    if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
+      # course_ids = current_user.accountable.course_ids
+      @note = Note.find_by(id: params[:id])
+      if !@note.nil?
+        render :show
+      else
+        flash[:notice] = 'Not Found'
+        redirect_to course_notes_path(course_id: params[:course_id])
+      end
+      return
+    end
+    @note = Note.find_by(id: params[:id])
+    unless current_user.accountable.course_ids.include?(params[:course_id].to_i)
       flash[:notice] = 'You are not authorized to view this page'
       redirect_to course_notes_path
     end
-    if @note.nil? 
-      flash[:notice] = 'Not Found'
-      redirect_to course_notes_path
-    end
+    return unless @note.nil?
+
+    flash[:notice] = 'Not Found'
+    redirect_to course_notes_path
   end
 
   def edit
     @note = Note.find(params[:id])
-    if !current_user.accountable.course_ids.include?(params[:course_id].to_i)
-      flash[:notice] = 'You are not authorized to view this page'
-      redirect_to course_notes_path
-    end
+    return if current_user.accountable.course_ids.include?(params[:course_id].to_i)
+
+    flash[:notice] = 'You are not authorized to view this page'
+    redirect_to course_notes_path
   end
 
   def update
     @note = Note.find(params[:id])
     # p @note
-    if !current_user.accountable.course_ids.include?(params[:course_id].to_i)
+    unless current_user.accountable.course_ids.include?(params[:course_id].to_i)
       flash[:notice] = 'You are not authorized to view this page'
       redirect_to course_notes_path
+      return
     end
-    if !current_user.accountable.course_ids.include?(params[:course_id].to_i)
-      flash[:notice] = 'You are not authorized to view this page'
-      redirect_to course_notes_path
-    end
+    # if !current_user.accountable.course_ids.include?(params[:course_id].to_i)
+    #   flash[:notice] = 'You are not authorized to view this page'
+    #   redirect_to course_note_path(@note)
+    #   return
+    # end
     if @note.update(note_params)
       @note.file.attach(params[:note][:file])
       flash[:notice] = 'Successfully Updated the Notes'
@@ -81,13 +94,18 @@ class NotesController < ApplicationController
 
   def destroy
     @note = Note.find(params[:id])
-    p @note
-    if @note.destroy
-      flash[:notice] = 'Successfully deleted the Notes'
-      redirect_to course_notes_path
+    # p @note
+    if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
+      if @note.destroy
+        flash[:notice] = 'Successfully deleted the Notes'
+        redirect_to course_notes_path
+      else
+        flash[:notice] = 'Failed to deleted the Notes'
+        redirect_to course_note_path
+      end
     else
-      flash[:notice] = 'Failed to deleted the Notes'
-      redirect_to course_note_path
+      flash[:notice] = 'Unauthorized to this page'
+      redirect_to course_notes_path
     end
   end
 

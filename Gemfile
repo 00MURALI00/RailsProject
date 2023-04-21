@@ -87,3 +87,5 @@ group :development, :test do
   gem 'factory_bot_rails'
 end
 gem 'rspec-sonarqube-formatter', '~> 1.5', require: false
+
+gem 'rails-controller-testing', '~> 1.0.5'
