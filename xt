@@ -1,0 +1,30 @@
+= ..eexxiitt!!
+
+(from ruby core)
+=== IImmpplleemmeennttaattiioonn  ffrroomm  KKeerrnneell
+------------------------------------------------------------------------
+  Process.exit!(status=false)
+
+------------------------------------------------------------------------
+
+Exits the process immediately. No exit handlers are run.
+_s_t_a_t_u_s is returned to the underlying system as the exit
+status.
+
+  Process.exit!(true)
+
+
+(from ruby core)
+=== IImmpplleemmeennttaattiioonn  ffrroomm  PPrroocceessss
+------------------------------------------------------------------------
+  Process.exit!(status=false)
+
+------------------------------------------------------------------------
+
+Exits the process immediately. No exit handlers are run.
+_s_t_a_t_u_s is returned to the underlying system as the exit
+status.
+
+  Process.exit!(true)
+
+

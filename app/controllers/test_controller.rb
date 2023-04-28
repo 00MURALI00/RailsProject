@@ -18,11 +18,11 @@ class TestController < ApplicationController
       @test = Test.find(params[:id])
     elsif current_user.role == 'student' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
       @test = Test.find_by(id: params[:id])
-      count = Testresult.where(test_id: @test.id, student_id: current_user.accountable.id).count
-      p @test.attempts
-      p count
-      if @test.attempts > count
-      render :taketest
+      testresult = Testresult.where(test_id: @test.id, student_id: current_user.accountable.id)
+      if testresult.nil?
+        render :taketest
+      elsif testresult.count < @test.attempts
+        render :taketest
       else
         flash[:notice] = 'You are left with no attempts'
         redirect_to course_test_index_path

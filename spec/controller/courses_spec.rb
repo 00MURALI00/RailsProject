@@ -4,7 +4,7 @@ RSpec.describe CoursesController, type: :controller do
   # render_views
   # describe do
   let!(:teacher_user) { create(:user, :for_teachers) }
-  let(:course) { create(:course, teacher: teacher_user.accountable) }
+  let!(:course) { create(:course, teacher: teacher_user.accountable) }
   let!(:student_user) { create(:user) }
   describe 'GET index' do
     context 'when teacher or student login or no one logged in' do
@@ -25,7 +25,7 @@ RSpec.describe CoursesController, type: :controller do
     context 'when teacher tries to access a non exsisting course' do
       it 'redirect to courses' do
         sign_in teacher_user
-        get :show, params: { id: 1 }
+        get :show, params: { id: course.id + 100 }
         expect(response).to redirect_to(courses_path)
       end
     end

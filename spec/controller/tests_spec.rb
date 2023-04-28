@@ -74,8 +74,7 @@ RSpec.describe TestController, type: :controller do
     context 'when teacher tries to create test' do
       it 'throws 200 status code' do
         sign_in teacher_user
-        get :create,
-             params: { test: { name: 'testing', course_id: course.id }, course_id: course.id, id: test.id }
+        get :create, params: { test: { name: 'testing', course_id: course.id, attempts: 5  }, course_id: course.id, id: test.id }
         expect(response).to redirect_to(course_test_index_path)
       end
     end

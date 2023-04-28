@@ -10,7 +10,7 @@ RSpec.describe TestresultController, type: :controller do
   let(:testresult) { create(:testresult, test: test, student_id: student_user.accountable.id) }
   describe "GET /testresults" do
     context 'When teacher tries to see all testresults' do
-      it 'throws 200 status code' do
+      it 'render index' do
         sign_in teacher_user
         get :index
         expect(response).to render_template :index

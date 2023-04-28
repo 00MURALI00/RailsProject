@@ -87,6 +87,6 @@ class Api::TestController < Api::ApiController
   end
 
   def test_params
-    params.require(:test).permit(:name, :course_id)
+    params.require(:test).permit(:name, :course_id, :attempts)
   end
 end

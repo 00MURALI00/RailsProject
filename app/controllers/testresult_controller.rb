@@ -3,9 +3,9 @@
 class TestresultController < ApplicationController
   def index
     @testresult = if current_user.role == 'student'
-                    Testresult.where(student_id: current_user.accountable_id)
+                    Testresult.where(student_id: current_user.accountable_id).group(:test_id)
                   else
-                    Testresult.all
+                    Testresult.all.group(:test_id)
                   end
   end
 
@@ -22,8 +22,8 @@ class TestresultController < ApplicationController
   end
 
   def destroy
-    @testresult = Testresult.find(params[:testresult_id])
-    if @testresult.destroy
+    @testresult = Testresult.find_by(id: params[:testresult_id])
+    if @testresult.destroy && !@testresult.nil? && current_user.role == 'teacher'
       flash[:notice] = 'Successfully Destroyed Test result'
       redirect_to testresult_index_path
     else

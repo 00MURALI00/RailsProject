@@ -9,10 +9,9 @@ class CoursesController < ApplicationController
   end
 
   def show
-    @course = Course.find(params[:id])
-    # return unless current_user.role == 'student'
-
-    if current_user.accountable.courses.include?(@course)
+    # debugger
+    if current_user.accountable.course_ids.include?(params[:id].to_i)
+      @course = Course.find(params[:id])
       render :show
     else
       flash[:notice] = 'You are not authorized to view this page'

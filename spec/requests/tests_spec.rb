@@ -74,7 +74,7 @@ RSpec.describe 'Tests', type: :request do
     context 'when teacher tries to create test' do
       it 'throws 200 status code' do
         post "/api/courses/#{course.id}/test",
-             params: { access_token: teacher_token.token, test: { name: 'testing', course_id: course.id } }
+             params: { access_token: teacher_token.token, test: { name: 'testing', course_id: course.id, attempts: 5 } }
         expect(response).to have_http_status(201)
       end
     end
