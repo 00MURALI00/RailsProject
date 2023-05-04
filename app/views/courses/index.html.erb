@@ -30,7 +30,11 @@
               </div>
             </div> %>
             <%# <%= image_tag(course.image)  %>
+            <% if course.image.attached? %>
             <div id='banner'><%= image_tag course.image,  alt: "banner", style: "height: 250px ; width: 240px" %></div>
+            <% else %>
+            <div id='banner'><%= image_tag 'Dummy_flag.png',  alt: "banner", style: "height: 250px ; width: 240px" %></div>
+            <% end %>
           </div>
           <div class="content back">
             <h2><%= course.name.capitalize %></h2>
