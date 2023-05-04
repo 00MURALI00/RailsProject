@@ -3,6 +3,7 @@ class NotesController < ApplicationController
 
   def index
     @notes = if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
+      # debugger
                @notes = Note.all.where(course_id: params[:course_id])
              elsif current_user.accountable.course_ids.include?(params[:course_id].to_i)
                @notes = Note.all.where(course_id: params[:course_id]).where.not(published_at: nil)
@@ -23,8 +24,10 @@ class NotesController < ApplicationController
 
   def create
     if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
+      
       @note = Note.new(note_params)
       if @note.save
+        @note.file.attach(params[:note][:file])
         flash[:notice] = 'Successfully Added the Notes'
         redirect_to course_path(id: params[:course_id])
       else

@@ -1,24 +1,26 @@
-<h1 style='text-align:center'> Test Results </h1><br>
-<% if @testresult.length != 0 %>
-      <div class="cards ui raised text container segment", style='width:500%'>
-    <% @testresult.each do |testresult| %>
-     <div class="card w-75 mb-3">
-      <div class="card-body">
-            <% if current_user.role == 'teacher' %>
-            <% student = Student.find(testresult.student_id) %>
-              <h4 class="card-title"><b> Student: </b><%= student.name.capitalize %> </h4><br>
-            <% end %>
-          <h5 class="class-text"><b>Test Name: </b>'<%= testresult.test.name %>'</h5><br>
-          <h5 class="class-text"><b>Score: </b><%= testresult.score %></h5><br>
+<h1 > Test Results </h1>
+<br>
+<% if !@testresult.nil? %>
+  <% @testresult.each do |testresult| %>
+    <div class="card">
+      <div class="card">
+        <% if current_user.role == 'teacher' %>
+          <div class="card-header">
+            <% stud = Student.find(testresult.student_id) %>
+            <b>Student</b><%= stud.name %>
+          </div>
+        <% end %>
+        <div class="card-body">
+          <h5 class="card-title"><b>Test:   </b><%= testresult.test.name %></h5>
+          <p class="card-text"><b>Score:  </b><%= testresult.score %></p>
           <% if current_user.role == 'teacher' %>
-            <li class="list-group-item">
-              <%= link_to 'Delete', testresult_destroy_path(testresult.id), data: { turbo_confirm: 'Are You Sure', turbo_method: :delete}, class:'btn btn-primary'%></li>
+            <%= link_to 'Delete', testresult_destroy_path(testresult.id), data: { turbo_confirm: 'Are You Sure', turbo_method: :delete}, class:'btn btn-primary'%>
           <% end %>
         </div>
-        </div><br>
-      <br>
-    <% end %>
       </div>
+    </div>
+    <br>
+  <% end %>
 <% else %>
   <h1> Nothing here!!!</h1>
 <% end  %>

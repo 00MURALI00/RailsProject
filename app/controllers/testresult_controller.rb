@@ -3,10 +3,11 @@
 class TestresultController < ApplicationController
   def index
     @testresult = if current_user.role == 'student'
-                    Testresult.where(student_id: current_user.accountable_id).group(:test_id)
+                    Testresult.where(student_id: current_user.accountable_id)
                   else
-                    Testresult.all.group(:test_id)
+                    Testresult.all
                   end
+    # p @testresult
   end
 
   def create

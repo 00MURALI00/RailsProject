@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   get 'testresult/index'
   get 'testresult/show'
+  get '/search', to: 'courses#search'
   devise_for :users, controllers: {
     registrations: 'users/registrations'
   }

@@ -33,7 +33,7 @@ class Api::NotesController < Api::ApiController
         @note.file.attach = params[:note][:file]
         render json: @note, status: :created
       else
-        render json: { error: @note.errors.full_message }, status: :unprocessable_entity
+        render json: { error: @note.errors }, status: :unprocessable_entity
       end
     else
       render json: { error: 'Authorization restricted' }, status: :unauthorized
@@ -76,7 +76,9 @@ class Api::NotesController < Api::ApiController
       if !@note.nil? && current_user.accountable.course_ids.include?(params[:course_id].to_i)
         # debugger
         if @note.update(note_params)
-          @note.file.attach = params[:note][:file]
+          unless params[:note][:file].nil?
+            @note.file.attach = params[:note][:file]
+          end
           render json: { message: 'Updated Successfully' }, status: :accepted
         else
           render json: { error: @note.errors.full_message }, status: :unprocessable_entity
@@ -96,7 +98,7 @@ class Api::NotesController < Api::ApiController
         if @note.destroy
           render json: { message: 'Destroyed Successfully' }, status: :ok
         else
-          render json: { error: @note.errors.full_message }, status: :unprocessable_entity
+          render json: { error: @note.errors }, status: :unprocessable_entity
         end
       else
         render json: { message: 'Not Found' }, status: :not_found

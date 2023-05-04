@@ -6,7 +6,7 @@
   <br>
   <br>
 <% end %>
-<% if @notes.size != 0 %>
+<% unless @notes.nil? %>
   <div class="card">
     <% @notes.each do |note| %>
       <div class="card-body">

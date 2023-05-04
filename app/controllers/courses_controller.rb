@@ -1,7 +1,10 @@
 class CoursesController < ApplicationController
   before_action :authenticate_user!, except: %i[index]
   def index
-    @courses = if user_signed_in? && current_user.role == 'teacher'
+    @q = Course.ransack(params[:q])
+    @courses = if !@q.result(distinct: true).nil?
+                 @q.result(distinct: true)
+               elsif user_signed_in? && current_user.role == 'teacher'
                  current_user.accountable.courses
                else
                  Course.all
@@ -30,8 +33,11 @@ class CoursesController < ApplicationController
 
   def create
     if current_user.role == 'teacher'
-      @course = Course.new(name: params[:course][:name], description: params[:course][:description],
-                           teacher_id: current_user.accountable_id)
+      @course = Course.new(course_params)
+      @course.teacher_id = current_user.accountable_id
+      if @course.image.nil?
+        @course.image = image_tag "Dummy_flag.png"
+      end
       if @course.save
         flash[:notice] = 'Successfully created the Course'
         redirect_to courses_path
@@ -63,10 +69,10 @@ class CoursesController < ApplicationController
 
   def edit
     @course = Course.find_by(id: params[:id])
-    if !(current_user.role == 'teacher' && current_user.accountable.courses.include?(@course))
-      flash[:notice] = 'You are not authorized to view this page'
-      redirect_to courses_path
-    end
+    return if current_user.role == 'teacher' && current_user.accountable.courses.include?(@course)
+
+    flash[:notice] = 'You are not authorized to view this page'
+    redirect_to courses_path
   end
 
   def update
@@ -116,6 +122,6 @@ class CoursesController < ApplicationController
   end
 
   def course_params
-    params.require(:course).permit(:name, :description)
+    params.require(:course).permit(:name, :description, :image)
   end
 end

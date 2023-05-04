@@ -1,4 +1,5 @@
-<h1> Courses </h1><br>
+<h1> Courses </h1>
+<br>
 <div>
   <% if user_signed_in? && current_user.role == 'teacher' %>
     <div>
@@ -6,24 +7,47 @@
     </div>
     <br>
   <% end %>
-  <% if Course.exists? %>
-    <div class="cards">
+  <div class='pos'>
+    <%= search_form_for @q do |f| %>
+      <div class='ui icon input shadow'>
+        <%= f.search_field :name_or_description_i_cont, placeholder: 'Search for...', class:"prompt" %>
+        <i class="search icon"></i>
+      </div>
+      <%# <%= f.submit  %>
+    <% end %>
+  </div>
+  <div class="ui link cards ui four cards" style="margin-right: 75px">
+    <% if Course.exists? %>
       <% @courses.each do |course| %>
-        <div class="card w-75 mb-3">
-          <div class="card-body">
-            <h4 class="card-title"><%= course.name.capitalize %></h4><br>
-            <h5 class="class-text"><%= course.description %></h5><br>
+        <div class="card shadow">
+          <div class="blurring dimmable image" style="width: 240px ; height: 250px">
+            <%# <div class="ui dimmer">
+              <div class="content">
+                <div class="center">
+                  <div class='ui inverted button'>
+                  </div>
+                </div>
+              </div>
+            </div> %>
+            <%# <%= image_tag(course.image)  %>
+            <div id='banner'><%= image_tag course.image,  alt: "banner", style: "height: 250px ; width: 240px" %></div>
+          </div>
+          <div class="content back">
+            <h2><%= course.name.capitalize %></h2>
+            <div class="meta">
+              <h5 class="date"><%= course.description %></h5>
+            </div>
+            <br>
             <% if user_signed_in? && current_user.role == 'student' && !current_user.accountable.courses.include?(course) %>
-              <%= link_to 'Enroll', enroll_course_path(course.id) , class:'btn btn-primary' %>
+              <%= link_to 'Enroll', enroll_course_path(course.id), class: 'btn btn-primary' %>
             <% else %>
-              <%= link_to 'Go to ' + course.name.to_s , course_path(course_id: course.id, id: course.id) , class:'btn btn-primary' %>
+              <%= link_to 'Go to ' + course.name.to_s , course_path(course_id: course.id, id: course.id), class: 'btn btn-primary'%>
             <% end %>
           </div>
-          <br>
         </div>
         <br>
         <br>
       <% end %>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 </div>

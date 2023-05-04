@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_21_101719) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_28_051518) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -95,8 +95,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_21_101719) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "course_id"
     t.date "published_at"
+    t.integer "course_id"
   end
 
   create_table "oauth_access_tokens", force: :cascade do |t|
