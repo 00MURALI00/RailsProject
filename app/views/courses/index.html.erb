@@ -16,7 +16,7 @@
       <%# <%= f.submit  %>
     <% end %>
   </div>
-  <div class="ui link cards ui four cards" style="margin-right: 75px">
+  <div class="ui special cards ui four cards" style="margin-right: 75px">
     <% if Course.exists? %>
       <% @courses.each do |course| %>
         <div class="card shadow">
@@ -45,11 +45,10 @@
             <% if user_signed_in? && current_user.role == 'student' && !current_user.accountable.courses.include?(course) %>
               <%= link_to 'Enroll', enroll_course_path(course.id), class: 'btn btn-primary' %>
             <% else %>
-              <%= link_to 'Go to ' + course.name.to_s , course_path(course_id: course.id, id: course.id), class: 'btn btn-primary'%>
+              <%= link_to 'Go to ' + course.name.to_s.capitalize , course_path(course_id: course.id, id: course.id), class: 'btn btn-primary'%>
             <% end %>
           </div>
         </div>
-        <br>
         <br>
       <% end %>
     <% end %>

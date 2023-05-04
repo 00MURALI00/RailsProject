@@ -1,22 +1,29 @@
-<div class="ui raised very padded text container segment">
-<h1> Notes </h1><br>
-<% if !@note.published_at.nil? || current_user.role == 'teacher' %>
-<%# <% p @note  %>
-<h2> <%= @note.name.capitalize %></h2>
-<h3> <%= @note.description %> </h3>
-<br>
-<br>
-<%= link_to 'Download', rails_blob_path(@note.file, disposition: "attachment"), class:"btn btn-primary btn-lg" %>
-<br>
-<br>
-<br>
-<p><%= link_to 'Back', { controller: 'notes', action: 'index' }, class:'btn btn-primary'%>
-<% if current_user.role == 'teacher' %>
-  <%= link_to 'Edit', { controller: 'notes', action: 'edit' }, class:'btn btn-primary'%>
-  <%= link_to "Delete", course_note_path(params[:course_id], @note), data: { turbo_confrim: "Are You Sure", turbo_method: :delete}, class:'btn btn-primary'%>
-<% end %>
-</p>
-</div>
+<div class="ui raised very padded text container segment", style= "margin: auto ; width: 50% ; padding: 10px;">
+  <h1> Notes </h1>
+  <br>
+  <% if !@note.published_at.nil? || current_user.role == 'teacher' %>
+    <%# <% p @note  %>
+    <h2> <%= @note.name.capitalize %></h2>
+    <h3> <%= @note.description %> </h3>
+    <br>
+    <br>
+    <% if @note.file.attached? %>
+      <%= link_to 'Download', rails_blob_path(@note.file, disposition: "attachment"), class:"fluid ui button", style: "font-weight: bold ; font-family: Monospace ; background-color: #007bff ; color: white" %>
+    <% else %>
+      <h3> No file has been uploaded!!!</h3>
+    <% end %>
+    <br>
+    <br>
+    <br>
+    <div class='pos2'>
+      <p><%= link_to 'Back', { controller: 'notes', action: 'index' }, class:'btn btn-primary'%>
+        <% if current_user.role == 'teacher' %>
+          <%= link_to 'Edit', { controller: 'notes', action: 'edit' }, class:'btn btn-primary'%>
+          <%= link_to "Delete", course_note_path(params[:course_id], @note), data: { turbo_confrim: "Are You Sure", turbo_method: :delete}, class:'btn btn-primary'%>
+        <% end %>
+      </div>
+    </p>
+  </div>
 <% else %>
   <h3>No Notes has been uploaded!!!</h3>
 <% end %>
