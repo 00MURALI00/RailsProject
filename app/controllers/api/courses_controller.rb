@@ -12,7 +12,7 @@ class Api::CoursesController < Api::ApiController
                end
     render json: @courses.to_json, status: :ok
   end
-
+``
   def show
     @course = Course.find_by(id: params[:id])
     # debugger
