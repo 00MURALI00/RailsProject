@@ -1,4 +1,4 @@
-<h1>Test</h1>
+<h1>Test</h1><br>
 <% if current_user.role == 'teacher' %>
   <div>
     <%= link_to 'Add Test', new_course_test_path(course_id: params[:course_id]), method: :post , class:'btn btn-danger' %>

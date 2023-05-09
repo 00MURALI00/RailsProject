@@ -14,14 +14,14 @@ class Api::NotesController < Api::ApiController
         @notes.delete(note) if note.published_at.nil?
       end
     else
-      render json: { error: 'Authorization restricted' }, status: :unauthorized
+      render json: { error: 'Authorization restricted' }, status: 403
       return
     end
     # debugger
     if @notes.length != 0
       render json: @notes, status: :ok
     else
-      render json: { message: 'No Notes Found' }, status: :unauthorized
+      render json: { message: 'No Notes Found' }, status: 403
     end
   end
 
@@ -36,7 +36,7 @@ class Api::NotesController < Api::ApiController
         render json: { error: @note.errors }, status: :unprocessable_entity
       end
     else
-      render json: { error: 'Authorization restricted' }, status: :unauthorized
+      render json: { error: 'Authorization restricted' }, status: 403
     end
   end
 
@@ -48,11 +48,11 @@ class Api::NotesController < Api::ApiController
           render json: @note, status: :ok
           return
         else
-          render json: { message: 'Not Found' }, status: :unauthorized
+          render json: { message: 'Not Found' }, status: 403
           return
         end
       else
-        render json: { error: 'Authorization restricted' }, status: :unauthorized
+        render json: { error: 'Authorization restricted' }, status: 403
         return
       end
     end
@@ -87,7 +87,7 @@ class Api::NotesController < Api::ApiController
         render json: { message: 'Not Found' }, status: :not_found
       end
     else
-      render json: { error: 'Authorization restricted' }, status: :unauthorized
+      render json: { error: 'Authorization restricted' }, status: 403
     end
   end
 
@@ -104,7 +104,7 @@ class Api::NotesController < Api::ApiController
         render json: { message: 'Not Found' }, status: :not_found
       end
     else
-      render json: { error: 'Authorization restricted' }, status: :unauthorized
+      render json: { error: 'Authorization restricted' }, status: 403
     end
   end
 

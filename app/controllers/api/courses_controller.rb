@@ -23,7 +23,7 @@ class Api::CoursesController < Api::ApiController
       if @course.students.include?(student)
         render json: @course, status: :ok
       else
-        render json: '404 Not Found', status: :unauthorized  
+        render json: '404 Not Found', status: 403  
       end
     else
       render json: '404 Not Found', status: :not_found
@@ -41,7 +41,7 @@ class Api::CoursesController < Api::ApiController
         render json: { error: @course.errors }, status: :unprocessable_entity
       end
     else
-      render json: { error: 'Authorization restricted' }, status: :unauthorized
+      render json: { error: 'Authorization restricted' }, status: 403
     end 
   end
 
@@ -58,7 +58,7 @@ class Api::CoursesController < Api::ApiController
         render json: { message: 'Something went wrong' }, status: :not_found
       end
     else
-      render json: { error: 'Authorization restricted' }, status: :unauthorized
+      render json: { error: 'Authorization restricted' }, status: 403
     end
   end
 
@@ -75,7 +75,7 @@ class Api::CoursesController < Api::ApiController
         render json: { message: 'Something went wrong' }, status: :not_found
       end
     else
-      render json: { error: 'Authorization restricted' }, status: :unauthorized
+      render json: { error: 'Authorization restricted' }, status: 403
     end
   end
 
@@ -85,11 +85,11 @@ class Api::CoursesController < Api::ApiController
 
   def enroll
     @course = Course.find(params[:id])
-    if current_user.role == 'student' && current_user.accountable.courses.include?(@course)
+    if current_user.role == 'student' 
       @course.students << current_user.accountable
       render json: { message: 'Successfully enrolled in the Course' }, status: :ok
     else
-      render json: { error: 'Authorization restricted' }, status: :unauthorized
+      render json: { error: 'Authorization restricted' }, status: 403
     end
   end
 
@@ -99,7 +99,7 @@ class Api::CoursesController < Api::ApiController
       @course.students.delete(current_user.accountable)
       render json: { message: 'Successfully dropped the Course' }, status: :ok
     else
-      render json: { error: 'Authorization restricted' }, status: :unauthorized
+      render json: { error: 'Authorization restricted' }, status: 403
     end
   end
 end

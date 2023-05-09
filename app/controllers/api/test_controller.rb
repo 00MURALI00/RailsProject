@@ -13,19 +13,19 @@ class Api::TestController < Api::ApiController
     if current_user.accountable.course_ids.include?(params[:course_id].to_i)
       render json: @tests, status: :ok
     else
-      render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+      render json: { message: 'Autheraization Restricted' }, status: 403
     end
   end
 
   def show
     if current_user.role == 'teacher' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
-      @test = Test.find(params[:id])
+      @test = Test.find_by(id: params[:id])
     elsif current_user.role == 'student' && current_user.accountable.course_ids.include?(params[:course_id].to_i)
       @test = Test.find_by(id: params[:id])
       render json: @test, status: :ok
       return
     else
-      render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+      render json: { message: 'Autheraization Restricted' }, status: 403
       return
     end
     if !@test.nil?
@@ -44,7 +44,7 @@ class Api::TestController < Api::ApiController
         render json: { message: @test.errors }, status: :unprocessable_entity
       end
     else
-      render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+      render json: { message: 'Autheraization Restricted' }, status: 403
     end
   end
 
@@ -65,7 +65,7 @@ class Api::TestController < Api::ApiController
         render json: { message: 'Not Found' }, status: :not_found
       end
     else
-      render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+      render json: { message: 'Autheraization Restricted' }, status: 403
     end
   end
 
@@ -82,7 +82,7 @@ class Api::TestController < Api::ApiController
         render json: { message: 'Not Found' }, status: :not_found
       end
     else
-      render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+      render json: { message: 'Autheraization Restricted' }, status: 403
     end
   end
 

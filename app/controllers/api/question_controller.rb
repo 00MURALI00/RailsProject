@@ -6,7 +6,7 @@ class Api::QuestionController < Api::ApiController
     if current_user.accountable.course_ids.include?(params[:course_id].to_i)
       render json: @questions, include: [:option], status: :ok
     else
-      render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+      render json: { message: 'Autheraization Restricted' }, status: 403
     end
   end
 
@@ -17,7 +17,7 @@ class Api::QuestionController < Api::ApiController
       if current_user.accountable.course_ids.include?(params[:course_id].to_i)
         render json: @question, include: [:option], status: :ok
       else
-        render json: { message: 'Autheraization Restricted' }, status: :unauthorized
+        render json: { message: 'Autheraization Restricted' }, status: 403
       end
     else
       render json: { message: 'Not Found' }, status: :not_found
@@ -34,7 +34,7 @@ class Api::QuestionController < Api::ApiController
         render json: { error: @question.errors }, status: :unprocessable_entity
       end
     else
-      render json: { error: 'You are not authorized to perform this action' }, status: :unauthorized
+      render json: { error: 'You are not authorized to perform this action' }, status: 403
     end
   end
 
@@ -51,7 +51,7 @@ class Api::QuestionController < Api::ApiController
         render json: { message: 'Not Found' }, status: :not_found
       end
     else
-      render json: { error: 'You are not authorized to perform this action' }, status: :unauthorized
+      render json: { error: 'You are not authorized to perform this action' }, status: 403
     end
   end
 
@@ -67,7 +67,7 @@ class Api::QuestionController < Api::ApiController
               render json: { message: 'Not Found' }, status: :not_found
       end
     else
-      render json: { error: @question.errors }, status: :unauthorized
+      render json: { error: @question.errors }, status: 403
     end
   end
 

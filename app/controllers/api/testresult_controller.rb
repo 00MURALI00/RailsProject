@@ -23,7 +23,7 @@ class Api::TestresultController < Api::ApiController
         render json: { message: 'Something went wrong' }, status: :unprocessable_entity
       end
     else
-      render json: { message: 'Authorization restricted' }, status: :unauthorized
+      render json: { message: 'Authorization restricted' }, status: 403
     end
   end
 
@@ -36,7 +36,7 @@ class Api::TestresultController < Api::ApiController
         render json: { message: 'Something went wrong' }, status: :unprocessable_entity
       end
     else
-      render json: { message: 'Authorization restricted' }, status: :unauthorized
+      render json: { message: 'Authorization restricted' }, status: 403
     end
   end
 

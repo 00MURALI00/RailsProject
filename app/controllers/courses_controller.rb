@@ -97,7 +97,7 @@ class CoursesController < ApplicationController
     if current_user.role == 'student'
       @course.students << current_user.accountable
       flash[:notice] = 'Successfully enrolled in the Course'
-      redirect_to course_path
+      redirect_to courses_path
     else
       flash[:notice] = 'You are not authorized to view this page'
       redirect_to courses_path

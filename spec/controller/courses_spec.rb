@@ -102,4 +102,42 @@ RSpec.describe CoursesController, type: :controller do
       end
     end
   end
+  describe 'enroll and drop' do
+    context 'when student tries to enroll in a course' do
+      it 'redirect to courses path' do
+        sign_in student_user
+        get :enroll, params: { id: course.id }
+        expect(flash[:notice]).to match(/Successfully enrolled in the Cours/)
+      end
+    end
+    context 'when teacher tries to enroll a course' do
+      it 'redirect to courses path' do
+        sign_in teacher_user
+        get :enroll, params: { id: course.id }
+        expect(flash[:notice]).to match(/You are not authorized to view this page/)
+      end
+    end
+    context 'when student tries to drop a course' do
+      it 'redirect to courses path' do
+        sign_in student_user
+        course.students << student_user.accountable
+        get :drop, params: { id: course.id }
+        expect(flash[:notice]).to match(/Successfully dropped the Course/)
+      end
+    end
+    context 'when teacher tries to drop a course' do
+      it 'redirect to courses path' do
+        sign_in teacher_user
+        get :drop, params: { id: course.id }
+        expect(flash[:notice]).to match(/You are not authorized to view this page/)
+      end
+    end
+    context 'when student tries to drop a course that not been enrolled' do
+      it 'redirect to courses path' do
+        sign_in student_user
+        get :drop, params: { id: course.id.to_i + 10 }
+        expect(flash[:notice]).to match(/You are not authorized to view this page/)
+      end
+    end
+  end
 end
